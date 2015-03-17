@@ -16,25 +16,26 @@ import java.util.*;
 
 public class ACO {
 	
+	// Problem class
 	private static Problem prob;
-
-	private static int numCities;
-
 
 	//File Variables
 	private static File file;
+
+	// ACO Parameters
+	private static int numAnts;
+	private static int numIterations;
+	private static double alpha;
+	private static double beta;
+	private static double pher;
+	private static double elitism;
 
 	//Main method
 	public static void main(String[] args) {
 		
 		file = new File(args[0]);
-		
-		// individuals = Integer.parseInt(args[1]);
-		// iterations = Integer.parseInt(args[6]);
-		// algorithm = args[7];
-		
-		prob = new Problem();
 
+		prob = new Problem();
 		prob.readFile(file);
 		prob.printAll();
 	}

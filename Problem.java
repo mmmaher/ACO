@@ -3,20 +3,20 @@ import java.io.*;
 
 public class Problem {
 	
-	private static List<int[]> cities;
+	private static List<Double[]> cities;
 	private static int numCities;
 
 	// file variable
 	private static BufferedReader reader = null;
 
 	public Problem() {
-		cities = new ArrayList<int[]>();
-		int[] temp = {0,0};
+		cities = new ArrayList<Double[]>();
+		Double[] temp = {0.,0.};
 		cities.add(temp); // add a random city at beginning
 	}
 
-	public static void addCity(int[] city) {
-		int[] temp = {city[1], city[2]};
+	public static void addCity(Double[] city) {
+		Double[] temp = {city[1], city[2]};
 		cities.add(temp);
 	}
 
@@ -28,13 +28,21 @@ public class Problem {
 		return numCities;
 	}
 
+	public static double getX(int i) {
+		return cities.get(i)[0];
+	}
+
+	public static double getY(int i) {
+		return cities.get(i)[1];
+	}
+
 	public static void printAll() {
 		for (int i = 1; i < cities.size(); i++) {
 			printCity(cities.get(i));
 		}
 	}
 
-	private static void printCity(int[] city) {
+	private static void printCity(Double[] city) {
 		System.out.println(city[0] + ", " + city[1]);
 	}
 
@@ -46,7 +54,14 @@ public class Problem {
 			while ((line = reader.readLine()) != null) {
 				if (line.charAt(0) == 'D') {
 					String[] splitStr = line.split(" ");
-					numCities = Integer.parseInt(splitStr[1]);
+					int numIndex = 0;
+					for (int i = 0; i < splitStr.length; i++) {
+						if (splitStr[i].contains(":")) {
+							numIndex = i;
+						}
+					}
+					numCities = Integer.parseInt(splitStr[numIndex+1]);
+					// System.out.println("CITIES: "+numCities);
 					continue;
 				} 
 				if (line.charAt(0) == 'N' || line.charAt(0) == 'C' ||
@@ -54,7 +69,7 @@ public class Problem {
 					continue;
 				}
 				
-				int[] temp = new int[3];
+				Double[] temp = new Double[3];
 				int index = 0;
 				boolean started = false;
 				String num = "";
@@ -64,7 +79,7 @@ public class Problem {
 						continue;
 					}
 					if (letter.equals(" ")) {
-						temp[index] = Integer.parseInt(num);
+						temp[index] = Double.parseDouble(num);
 						num = "";
 						index++;
 						started = false;
@@ -73,7 +88,7 @@ public class Problem {
 					num = num + letter;
 					started = true;
 				}
-				temp[index] = Integer.parseInt(num);
+				temp[index] = Double.parseDouble(num);
 				addCity(temp);
 			}
 			reader.close();
@@ -85,6 +100,6 @@ public class Problem {
 	}
 
 	public static void main(String[] args) {
-		
+
 	}
 }
