@@ -24,10 +24,11 @@ public class ACO {
 
 	// ACO Parameters
 	private static int numAnts;
-	private static int numIterations;
-	private static double alpha;
-	private static double beta;
-	private static double pher;
+	private static int numTours; // number of iterations
+	private static double alpha; // pheromone trail importance
+	private static double beta; // distance between cities importance
+	private static double phi; // local pheromone update
+	private static double rho; // global pheromone update
 	private static double elitism;
 
 	//Main method

@@ -11,8 +11,6 @@ public class Problem {
 
 	public Problem() {
 		cities = new ArrayList<Double[]>();
-		Double[] temp = {0.,0.};
-		cities.add(temp); // add a random city at beginning
 	}
 
 	public static void addCity(Double[] city) {
@@ -28,16 +26,16 @@ public class Problem {
 		return numCities;
 	}
 
-	public static double getX(int i) {
+	public static Double getX(int i) {
 		return cities.get(i)[0];
 	}
 
-	public static double getY(int i) {
+	public static Double getY(int i) {
 		return cities.get(i)[1];
 	}
 
 	public static void printAll() {
-		for (int i = 1; i < cities.size(); i++) {
+		for (int i = 0; i < cities.size(); i++) {
 			printCity(cities.get(i));
 		}
 	}
@@ -61,7 +59,6 @@ public class Problem {
 						}
 					}
 					numCities = Integer.parseInt(splitStr[numIndex+1]);
-					// System.out.println("CITIES: "+numCities);
 					continue;
 				} 
 				if (line.charAt(0) == 'N' || line.charAt(0) == 'C' ||
