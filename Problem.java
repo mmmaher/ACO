@@ -22,6 +22,10 @@ public class Problem {
 		return 0;
 	}
 
+	public static Double[] getCity(int i) {
+		return cities[i-1];
+	}
+
 	public static int getNumCities() {
 		return numCities;
 	}
