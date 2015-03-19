@@ -69,6 +69,7 @@ public class ACORunner {
 		}
 	}
 
+
 	private static int chooseSpecified(double num, double[] array) {
 		// sees where specified num falls in the array
 		for (int i = 0; i < array.length; i++) {
