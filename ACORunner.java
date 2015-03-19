@@ -69,6 +69,16 @@ public class ACORunner {
 		}
 	}
 
+	private static String getEdgeBetweenCities(int city1, int city2) {
+		String edgeString;
+		if (city1 < city2) {
+			edgeString = String.valueOf(city1) + String.valueOf(city2);
+		}
+		else {
+			edgeString = String.valueOf(city2) + String.valueOf(city1);
+		}
+		return edgeString;
+	}
 
 	private static int chooseSpecified(double num, double[] array) {
 		// sees where specified num falls in the array
@@ -88,14 +98,7 @@ public class ACORunner {
 		// calculate the sum of all the choices probabilities, 
 		// aka the function's denominator
 		for (city : ant.getCitiesNotVisited()) {
-			String edgeString;
-			if (currCity < city) {
-				edgeString = String.valueOf(currCity) + String.valueOf(city);
-			}
-			else {
-				edgeString = String.valueOf(city) + String.valueOf(currCity);
-			}
-			Edge currEdge = edges.get(edgeString);
+			Edge currEdge = edges.get(getEdgeBetweenCities(currCity, city));
 
 			double value = (currEdge.getPheromoneLevel()) * (1/currEdge.getLength());
 			// TODO add in appropriate factors, wherever they go...
@@ -138,15 +141,7 @@ public class ACORunner {
 			// Chosenone should be the index value of the city to be removed
 			int chosenIndex = chooseSpecifiedB(randomNum, sums);
 			int chosenCity = ant.getCitiesNotVisited().get(chosenIndex);
-
-			String edgeString;
-			if (ant.getCurrCity() < chosenCity) {
-				edgeString = String.valueOf(ant.getCurrCity()) + String.valueOf(chosenCity);
-			}
-			else {
-				edgeString = String.valueOf(chosenCity) + String.valueOf(ant.getCurrCity());
-			}
-			Edge chosenEdge = edges.get(edgeString);
+			Edge chosenEdge = edges.get(getEdgeBetweenCities(ant.getCurrCity(), chosenCity));
 
 			// So at this point...
 			// chosenIndex - holds index of the city in the citiesNotVisited list
