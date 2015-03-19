@@ -16,13 +16,17 @@ public class Ant {
 
 	public Ant(int numCities) {
 		citiesNotVisited = new ArrayList<Integer>();
-		for (int i = 1; i <= numCities; i++) {
-			citiesNotVisited.add(i);
-		}
+		resetNotVisited();
 		path = new int[numCities];
 		pathEdges = new String[numCities];
 		currPathIndex = 0;
 		pathLength = 0.0;
+	}
+
+	public static void resetNotVisited() {
+		for (int i = 1; i <= numCities; i++) {
+			citiesNotVisited.add(i);
+		}
 	}
 
 	public static List<Integer> getCitiesNotVisited() {

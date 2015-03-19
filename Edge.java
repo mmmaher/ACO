@@ -34,6 +34,10 @@ public class Edge {
 		return pheromoneLevel;
 	}
 
+	public static void updatePheromoneLevel(double amount) {
+		pheromoneLevel = amount;
+	}
+
 	public static void printEdge() {
 		System.out.println("Edge between city " + endCities[0] + " and city " + endCities[1]);
 	}

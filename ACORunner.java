@@ -155,6 +155,34 @@ public class ACORunner {
 
 	}
 
+	/* After the path is complete, the ants should retrace they're paths and deposit
+	the correct amount of pheromones. */
+	private static void retraceCompletePaths() {
+		for (ant : ants) {
+
+		}
+	}
+
+	/* Once tours are complete, clear the paths so the ants can begin again */
+	private static void clearPaths() {
+		for (ant : ants) {
+			if (ant.isTourComplete) {
+				ant.resetNotVisited();
+			} else {
+				System.out.println("ERROR list isn't empty")
+			}
+		}
+	}
+
+	/* Evaporates all the edges' pheromone levels by calculated amount*/
+	// TODO the formula to calc evaporationamount is not completely implemented
+	private static void evaporatePheromones() {
+		for (edge : edges) {
+			double newAmount = (1 - evaporationFactor) * edge.getPheromoneLevel();
+			edge.updatePheromoneLevel(newAmount);
+		}
+	}
+
 	public static void run() {
 
 		for (int i = 0; i < numIterations; i++) {
@@ -165,8 +193,9 @@ public class ACORunner {
 				findPaths();
 			}
 
-
-
+			retraceCompletePaths();
+			clearPaths();
+			evaporatePheromones();
 
 
 
