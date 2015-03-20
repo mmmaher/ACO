@@ -59,7 +59,11 @@ public class ACORunner {
 	}
 
 	public static void printBestTour() {
-
+		for (int i = 0; i < numCities; i++) {
+			System.out.print(bestTour[i] + " ");
+		}
+		System.out.println("");
+		System.out.println("Length: " + bestTourLength);
 	}
 
 	private static void startAnts() {
@@ -69,7 +73,7 @@ public class ACORunner {
 		}
 	}
 
-	private static String getEdgeBetweenCities(int city1, int city2) {
+	private static Edge getEdgeBetweenCities(int city1, int city2) {
 		String edgeString;
 		if (city1 < city2) {
 			edgeString = String.valueOf(city1) + String.valueOf(city2);
@@ -77,7 +81,8 @@ public class ACORunner {
 		else {
 			edgeString = String.valueOf(city2) + String.valueOf(city1);
 		}
-		return edgeString;
+		Edge edge = edges.get(edgeString);
+		return edge;
 	}
 
 	private static int chooseSpecified(double num, double[] array) {
@@ -98,7 +103,7 @@ public class ACORunner {
 		// calculate the sum of all the choices probabilities, 
 		// aka the function's denominator
 		for (city : ant.getCitiesNotVisited()) {
-			Edge currEdge = edges.get(getEdgeBetweenCities(currCity, city));
+			Edge currEdge = getEdgeBetweenCities(currCity, city);
 
 			double value = (currEdge.getPheromoneLevel()) * (1/currEdge.getLength());
 			// TODO add in appropriate factors, wherever they go...
@@ -111,8 +116,11 @@ public class ACORunner {
 		return sum;
 	}
 
+	// TODO check the algorithm implementation and add in appropriate factors
+	// this is incomplete
 	private static void calculateChoice(int fromCity, int toCity, double sumChoices) {
-
+		Edge edge = getEdgeBetweenCities(fromCity, toCity);
+		return edge.getPheromoneLevel() * 1/edge.getLength() / sumChoices;
 	}
 
 	private static void findPaths() {
@@ -134,14 +142,12 @@ public class ACORunner {
 				}
 
 			}
-			// TODO implement choosing the next edge correctly up above
-
 			randomNum = (rand.nextDouble() * (max_value - min_value)) + min_value;
 
 			// Chosenone should be the index value of the city to be removed
 			int chosenIndex = chooseSpecifiedB(randomNum, sums);
 			int chosenCity = ant.getCitiesNotVisited().get(chosenIndex);
-			Edge chosenEdge = edges.get(getEdgeBetweenCities(ant.getCurrCity(), chosenCity));
+			Edge chosenEdge = getEdgeBetweenCities(ant.getCurrCity(), chosenCity);
 
 			// So at this point...
 			// chosenIndex - holds index of the city in the citiesNotVisited list
@@ -157,9 +163,13 @@ public class ACORunner {
 
 	/* After the path is complete, the ants should retrace they're paths and deposit
 	the correct amount of pheromones. */
-	private static void retraceCompletePaths() {
+	// TODO Not sure about what amount exactly they should update by
+	private static void retracePaths() {
 		for (ant : ants) {
-
+			for (edge : ant.getPathEdges()) {
+				double amount = 1/ant.getPathLength();
+				edges.get(edge).updatePheromoneLevel(amount);
+			}
 		}
 	}
 
@@ -193,7 +203,7 @@ public class ACORunner {
 				findPaths();
 			}
 
-			retraceCompletePaths();
+			retracePaths();
 			clearPaths();
 			evaporatePheromones();
 
