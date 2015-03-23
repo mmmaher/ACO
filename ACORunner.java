@@ -1,7 +1,7 @@
 import java.io.*;
 import java.util.*;
 import java.util.HashMap;
-import Problem.java;
+import java.util.Map;
 
 public class ACORunner {
 
@@ -42,12 +42,14 @@ public class ACORunner {
 	private static void initializeEdges() {
 		numEdges = (numCities * (numCities - 1))/2;
 		edges = new HashMap<String, Edge>();
+		String temp_key;
 
 		for (int i = 1; i < numCities; i++) {
-			for (int j = i + 1; j <= numCities; j++)
-				String temp_key = String.valueOf(i) + String.valueOf(j);
+			for (int j = i + 1; j <= numCities; j++) {
+				temp_key = String.valueOf(i) + String.valueOf(j);
 				Edge temp = new Edge(problem.getCity(i), i, problem.getCity(j), j);
 				edges.put(temp_key, temp);
+			}
 		}
 	}
 
@@ -73,7 +75,7 @@ public class ACORunner {
 		}
 	}
 
-	private static Edge getEdgeBetweenCities(int city1, int city2) {
+	private static String getEdgeKeyBetweenCities(int city1, int city2) {
 		String edgeString;
 		if (city1 < city2) {
 			edgeString = String.valueOf(city1) + String.valueOf(city2);
@@ -81,8 +83,8 @@ public class ACORunner {
 		else {
 			edgeString = String.valueOf(city2) + String.valueOf(city1);
 		}
-		Edge edge = edges.get(edgeString);
-		return edge;
+		// Edge edge = edges.get(edgeString);
+		return edgeString;
 	}
 
 	private static int chooseSpecified(double num, double[] array) {
@@ -96,14 +98,14 @@ public class ACORunner {
 		return 0;
 	}
 
-	private static void calcAllChoices(Ant ant) {
-		double sum;
+	private static double calcAllChoices(Ant ant) {
+		double sum = 0.0;
 		int currCity = ant.getCurrCity();
 
 		// calculate the sum of all the choices probabilities, 
 		// aka the function's denominator
-		for (city : ant.getCitiesNotVisited()) {
-			Edge currEdge = getEdgeBetweenCities(currCity, city);
+		for (Integer city : ant.getCitiesNotVisited()) {
+			Edge currEdge = edges.get(getEdgeKeyBetweenCities(currCity, city));
 
 			double value = (currEdge.getPheromoneLevel()) * (1/currEdge.getLength());
 			// TODO add in appropriate factors, wherever they go...
@@ -118,24 +120,27 @@ public class ACORunner {
 
 	// TODO check the algorithm implementation and add in appropriate factors
 	// this is incomplete
-	private static void calculateChoice(int fromCity, int toCity, double sumChoices) {
-		Edge edge = getEdgeBetweenCities(fromCity, toCity);
+	private static double calculateChoice(int fromCity, int toCity, double sumChoices) {
+		Edge edge = edges.get(getEdgeKeyBetweenCities(fromCity, toCity));
 		return edge.getPheromoneLevel() * 1/edge.getLength() / sumChoices;
 	}
 
 	private static void findPaths() {
-		double min_value, max_value, randomNum;
+		double min_value = Double.MAX_VALUE;
+		double max_value = -1;
+		double randomNum;
 
-		for (ant : ants) {
+		for (Ant ant : ants) {
 			double sum = 0.0;
+			// Sums will correspond to the index of the city in the list of uncvisited cities
+			double sums[] = new double[ant.getCitiesNotVisited().size()];
 			double totalChoiceSum = calcAllChoices(ant);
 			for (int i = 0; i < ant.getCitiesNotVisited().size(); i++) {
-				// Sums will correspond to the index of the city in the list of uncvisited cities
-				double sums[] = new double[ant.getCitiesNotVisited.size()];
-				sum += calculateChoice(ant.getCurrCity(), Integer.intValue(ant.getCitiesNotVisited().get(i)), totalChoiceSum);
+				sum += calculateChoice(ant.getCurrCity(), ant.getCitiesNotVisited().get(i), totalChoiceSum);
 				sums[i] = sum;
+
 				if (sum < min_value) {
-				min_value = sum;
+					min_value = sum;
 				}
 				if (sum > max_value) {
 					max_value = sum;
@@ -145,14 +150,14 @@ public class ACORunner {
 			randomNum = (rand.nextDouble() * (max_value - min_value)) + min_value;
 
 			// Chosenone should be the index value of the city to be removed
-			int chosenIndex = chooseSpecifiedB(randomNum, sums);
+			int chosenIndex = chooseSpecified(randomNum, sums);
 			int chosenCity = ant.getCitiesNotVisited().get(chosenIndex);
-			Edge chosenEdge = getEdgeBetweenCities(ant.getCurrCity(), chosenCity);
+			String chosenEdge = getEdgeKeyBetweenCities(ant.getCurrCity(), chosenCity);
 
 			// So at this point...
 			// chosenIndex - holds index of the city in the citiesNotVisited list
 			// chosenCity - is the actual integer value at that index, so the city that was chosen
-			// chosenEdge - the edge between the ants current city, and the chosen city
+			// chosenEdge - the edge key between the ants current city, and the chosen city
 			// Now: add city to the path (also removes it frm list of unvisited), add the edge to path edges
 			// Add edge and city adds the city and edge, removes city frm list, and increments current index
 			ant.addEdgeAndCity(chosenCity, chosenEdge);
@@ -165,8 +170,8 @@ public class ACORunner {
 	the correct amount of pheromones. */
 	// TODO Not sure about what amount exactly they should update by
 	private static void retracePaths() {
-		for (ant : ants) {
-			for (edge : ant.getPathEdges()) {
+		for (Ant ant : ants) {
+			for (String edge : ant.getPathEdges()) {
 				double amount = 1/ant.getPathLength();
 				edges.get(edge).updatePheromoneLevel(amount);
 			}
@@ -175,11 +180,11 @@ public class ACORunner {
 
 	/* Once tours are complete, clear the paths so the ants can begin again */
 	private static void clearPaths() {
-		for (ant : ants) {
-			if (ant.isTourComplete) {
+		for (Ant ant : ants) {
+			if (ant.isTourComplete()) {
 				ant.resetNotVisited();
 			} else {
-				System.out.println("ERROR list isn't empty")
+				System.out.println("ERROR list isn't empty");
 			}
 		}
 	}
@@ -187,9 +192,11 @@ public class ACORunner {
 	/* Evaporates all the edges' pheromone levels by calculated amount*/
 	// TODO the formula to calc evaporationamount is not completely implemented
 	private static void evaporatePheromones() {
-		for (edge : edges) {
-			double newAmount = (1 - evaporationFactor) * edge.getPheromoneLevel();
-			edge.updatePheromoneLevel(newAmount);
+		for (Map.Entry<String, Edge> entry : edges.entrySet()) {
+			double newAmount = (1 - evaporationFactor) * entry.getValue().getPheromoneLevel();
+			entry.getValue().updatePheromoneLevel(newAmount);
+
+		    System.out.println(entry.getKey() + "/" + entry.getValue());
 		}
 	}
 

@@ -1,14 +1,14 @@
 import java.io.*;
 import java.util.*;
-import java.lang.Math.*; 
+import static java.lang.Math.*; 
 
 public class Edge {
 
-	private static int[] endCities;
-	private static double length;
-	private static double pheromoneLevel;
+	private int[] endCities;
+	private double length;
+	private double pheromoneLevel;
 
-	private static computeLength(double x1, double y1, double x2, double y2) {
+	private double computeLength(double x1, double y1, double x2, double y2) {
 		return sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2));
 	}
 
@@ -22,23 +22,23 @@ public class Edge {
 		pheromoneLevel = 0.01;
 	}
 
-	public static double getLength() {
+	public double getLength() {
 		return length;
 	}
 
-	public static int[] getEndCities() {
+	public int[] getEndCities() {
 		return endCities;
 	}
 
-	public static double getPheromoneLevel() {
+	public double getPheromoneLevel() {
 		return pheromoneLevel;
 	}
 
-	public static void updatePheromoneLevel(double amount) {
+	public void updatePheromoneLevel(double amount) {
 		pheromoneLevel = amount;
 	}
 
-	public static void printEdge() {
+	public void printEdge() {
 		System.out.println("Edge between city " + endCities[0] + " and city " + endCities[1]);
 	}
 }

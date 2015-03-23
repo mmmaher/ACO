@@ -1,6 +1,5 @@
 import java.io.*;
 import java.util.*;
-import Edge.java;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -12,9 +11,10 @@ public class Ant {
 	private int[] path;
 	private String[] pathEdges;
 	private double pathLength;
-	private int currPathIndex;
+	private int currPathIndex, numCities;
 
-	public Ant(int numCities) {
+	public Ant(int numCities_) {
+		numCities = numCities_;
 		citiesNotVisited = new ArrayList<Integer>();
 		resetNotVisited();
 		path = new int[numCities];
@@ -23,38 +23,38 @@ public class Ant {
 		pathLength = 0.0;
 	}
 
-	public static void resetNotVisited() {
+	public void resetNotVisited() {
 		for (int i = 1; i <= numCities; i++) {
 			citiesNotVisited.add(i);
 		}
 	}
 
-	public static List<Integer> getCitiesNotVisited() {
+	public List<Integer> getCitiesNotVisited() {
 		return citiesNotVisited;
 	}
 
-	public static int[] getPath() {
+	public int[] getPath() {
 		return path;
 	}
 
-	public static String[] getPathEdges() {
+	public String[] getPathEdges() {
 		return pathEdges;
 	}
 
-	public static double getPathLength() {
+	public double getPathLength() {
 		return pathLength;
 	}
 
-	public static int getCurrCity() {
+	public int getCurrCity() {
 		return path[currPathIndex-1];
 	}
 
-	public static void resetPath() {
-		path = 0.0;
+	public void resetPath() {
+		pathLength = 0.0;
 		currPathIndex = 0;
 	}
 
-	public static void updatePathLength(double amount) {
+	public void updatePathLength(double amount) {
 		pathLength += amount;
 	}
 
@@ -63,20 +63,20 @@ public class Ant {
 	// 	currPathIndex++;
 	// }
 
-	public static void addCityToPath(int city) {
+	public void addCityToPath(int city) {
 		citiesNotVisited.remove(Integer.valueOf(city));
 		path[currPathIndex] = city;
 		currPathIndex++;
 	}
 
-	public static void addEdgeAndCity(int city, String edge) {
+	public void addEdgeAndCity(int city, String edge) {
 		citiesNotVisited.remove(Integer.valueOf(city));
 		path[currPathIndex] = city;
 		pathEdges[currPathIndex] = edge;
 		currPathIndex++;
 	}
 
-	public static boolean isTourComplete() {
+	public boolean isTourComplete() {
 		return citiesNotVisited.isEmpty();
 	}
 
