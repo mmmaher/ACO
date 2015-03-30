@@ -18,25 +18,15 @@ public class Problem {
 		cities[i] = temp;
 	}
 
-	public static int getFitness() {
-		return 0;
-	}
+	public static int getFitness() { return 0; }
 
-	public static double[] getCity(int i) {
-		return cities[i-1];
-	}
+	public static double[] getCity(int i) { return cities[i-1]; }
 
-	public static int getNumCities() {
-		return numCities;
-	}
+	public static int getNumCities() { return numCities; }
 
-	public static double getX(int i) {
-		return cities[i-1][0];
-	}
+	public static double getX(int i) { return cities[i-1][0]; }
 
-	public static double getY(int i) {
-		return cities[i-1][1];
-	}
+	public static double getY(int i) { return cities[i-1][1]; }
 
 	public static void printAll() {
 		for (int i = 0; i < numCities; i++) {

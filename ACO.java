@@ -35,9 +35,16 @@ public class ACO {
 	public static void main(String[] args) {
 		
 		file = new File(args[0]);
+		numAnts = Integer.parseInt(args[1]);
+		alpha = Double.parseDouble(args[2]);
+		beta = Double.parseDouble(args[3]);
+		
 
 		prob = new Problem();
 		prob.readFile(file);
 		prob.printAll();
+		
+		
+		
 	}
 }

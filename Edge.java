@@ -22,21 +22,13 @@ public class Edge {
 		pheromoneLevel = 0.01;
 	}
 
-	public double getLength() {
-		return length;
-	}
+	public double getLength() { return length; }
 
-	public int[] getEndCities() {
-		return endCities;
-	}
+	public int[] getEndCities() { return endCities; }
 
-	public double getPheromoneLevel() {
-		return pheromoneLevel;
-	}
+	public double getPheromoneLevel() { return pheromoneLevel; }
 
-	public void updatePheromoneLevel(double amount) {
-		pheromoneLevel = amount;
-	}
+	public void updatePheromoneLevel(double amount) { pheromoneLevel = amount; }
 
 	public void printEdge() {
 		System.out.println("Edge between city " + endCities[0] + " and city " + endCities[1]);

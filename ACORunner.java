@@ -29,10 +29,10 @@ public class ACORunner {
 	private static Random rand = new Random();
 
 	public ACORunner(Problem problem_, int numAnts_, int numIterations_) {
-		problem = problem_;
-		numCities = problem.getNumCities();
-		numAnts = numAnts_;
-		numIterations = numIterations_;
+		this.problem = problem_;
+		this.numCities = problem.getNumCities();
+		this.numAnts = numAnts_;
+		this.numIterations = numIterations_;
 		initializeAnts();
 		initializeEdges();
 	}
