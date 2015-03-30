@@ -163,7 +163,10 @@ public class ACORunner {
 			// Now: add city to the path (also removes it frm list of unvisited), add the edge to path edges
 			// Add edge and city adds the city and edge, removes city frm list, and increments current index
 			ant.addEdgeAndCity(chosenCity, chosenEdge);
-			updateEdgePheromone(edges.get(chosenEdge));
+			if (!elitist) {
+				updateEdgePheromone(edges.get(chosenEdge));
+			}
+			
 			
 		}
 	}
