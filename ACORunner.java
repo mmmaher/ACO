@@ -176,13 +176,6 @@ public class ACORunner {
 	private static void updateEdgePheromone(Edge edge) {
 		double amount = (1 - wearingAwayFactor_sigma) * edge.getPheromoneLevel() + wearingAwayFactor_sigma * wearingAwayFactor_tauNot;
 		edge.updatePheromoneLevel(amount);
-
-		// for (Ant ant : ants) {
-		// 	for (String edge : ant.getPathEdges()) {
-		// 		double amount = 1/ant.getPathLength();
-		// 		edges.get(edge).updatePheromoneLevel(amount);
-		// 	}
-		// }
 	}
 
 	/* Once tours are complete, clear the paths so the ants can begin again */
@@ -201,13 +194,12 @@ public class ACORunner {
 	private static void evaporatePheromones() {
 		for (Map.Entry<String, Edge> entry : edges.entrySet()) {
 			double newAmount;
-			if (elitist) {
-				
-			} else {
+			if (!elitist) {
 				newAmount = (1 - evaporationFactor) * entry.getValue().getPheromoneLevel();
+			} else {
+				// Elitist implementation goes here; should be according to the bsf
 			}
 			entry.getValue().updatePheromoneLevel(newAmount);
-
 		    System.out.println(entry.getKey() + "/" + entry.getValue());
 		}
 	}
@@ -221,8 +213,6 @@ public class ACORunner {
 			for (int k = 0; k < numCities; k++) {
 				findPaths();
 			}
-
-			// retracePaths();
 			clearPaths();
 			evaporatePheromones();
 
