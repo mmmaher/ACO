@@ -5,12 +5,14 @@ import java.util.Map;
 import java.lang.Math;
 
 public class ACORunner {
+	private static final 1 = ELITISM_IMPLEMENTATION;
 
 	/* Algorithm constants */
 	private static int numAnts;
 	private static int numCities;
 	private static int numIterations;
 	private static int numEdges;
+	private static boolean elitist;
 
 	private static Problem problem;
 	private static HashMap<String, Edge> edges;
@@ -29,13 +31,18 @@ public class ACORunner {
 
 	private static Random rand = new Random();
 
-	public ACORunner(Problem problem_, int numAnts_, int numIterations_) {
+	public ACORunner(Problem problem_, int numAnts_, int numIterations_, boolean elitist_) {
 		problem = problem_;
 		numCities = problem.getNumCities();
 		numAnts = numAnts_;
 		numIterations = numIterations_;
 		initializeAnts();
 		initializeEdges();
+		if (elitist_) {
+			elitist = true;
+		} else {
+			elitist = false;
+		}
 	}
 	
 	/* Makes an edge between each city and every other city, and adds
@@ -193,7 +200,12 @@ public class ACORunner {
 	// TODO the formula to calc evaporationamount is not completely implemented
 	private static void evaporatePheromones() {
 		for (Map.Entry<String, Edge> entry : edges.entrySet()) {
-			double newAmount = (1 - evaporationFactor) * entry.getValue().getPheromoneLevel();
+			double newAmount;
+			if (elitist) {
+				
+			} else {
+				newAmount = (1 - evaporationFactor) * entry.getValue().getPheromoneLevel();
+			}
 			entry.getValue().updatePheromoneLevel(newAmount);
 
 		    System.out.println(entry.getKey() + "/" + entry.getValue());
