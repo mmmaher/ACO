@@ -5,7 +5,7 @@ import java.util.Map;
 import java.lang.Math;
 
 public class ACORunner {
-	private static final 1 = ELITISM_IMPLEMENTATION;
+	private static final int ELITISM_IMPLEMENTATION = 1;
 
 	/* Algorithm constants */
 	private static int numAnts;
@@ -31,11 +31,13 @@ public class ACORunner {
 
 	private static Random rand = new Random();
 
+
 	public ACORunner(Problem problem_, int numAnts_, int numIterations_, boolean elitist_) {
 		problem = problem_;
-		numCities = problem.getNumCities();
+		numCities = problem.cities.numCities();
 		numAnts = numAnts_;
 		numIterations = numIterations_;
+
 		initializeAnts();
 		initializeEdges();
 		if (elitist_) {
@@ -55,7 +57,7 @@ public class ACORunner {
 		for (int i = 1; i < numCities; i++) {
 			for (int j = i + 1; j <= numCities; j++) {
 				temp_key = String.valueOf(i) + String.valueOf(j);
-				Edge temp = new Edge(problem.getCity(i), i, problem.getCity(j), j);
+				Edge temp = new Edge(problem.cities.getCity(i), problem.cities.getCity(j));
 				edges.put(temp_key, temp);
 			}
 		}
@@ -196,14 +198,10 @@ public class ACORunner {
 	// TODO the formula to calc evaporationamount is not completely implemented
 	private static void evaporatePheromones() {
 		for (Map.Entry<String, Edge> entry : edges.entrySet()) {
-			double newAmount;
-			if (!elitist) {
-				newAmount = (1 - evaporationFactor) * entry.getValue().getPheromoneLevel();
-			} else {
-				// Elitist implementation goes here; should be according to the bsf
-			}
+			//Pheromone evaporates the same in ACS and Elitist 
+			double newAmount = (1 - evaporationFactor) * entry.getValue().getPheromoneLevel();
 			entry.getValue().updatePheromoneLevel(newAmount);
-		    System.out.println(entry.getKey() + "/" + entry.getValue());
+			System.out.println(entry.getKey() + "/" + entry.getValue());
 		}
 	}
 

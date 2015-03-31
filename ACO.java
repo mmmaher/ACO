@@ -21,6 +21,9 @@ public class ACO {
 
 	//File Variables
 	private static File file;
+	
+	//ACO runner instance
+	//private static ACORunner runner;
 
 	// ACO Parameters
 	private static int numAnts;
@@ -35,9 +38,28 @@ public class ACO {
 	public static void main(String[] args) {
 		
 		file = new File(args[0]);
-
+		//elitism = args([8]);
+		//numAnts = Integer.parseInt(args[1]);
+		//alpha = Double.parseDouble(args[2]);
+		//beta = Double.parseDouble(args[3]);
+		
+		/*
+		if (elitism.equals("el") {
+				
+				
+		} else if (elitism.equals("ne") {
+				
+				
+		} else {
+			System.out.println("Invalid input");
+			System.exit(0);
+		}
+		*/
+		
 		prob = new Problem();
 		prob.readFile(file);
-		prob.printAll();
+		prob.cities.printCities();
+		
+		
 	}
 }

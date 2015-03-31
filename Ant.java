@@ -29,34 +29,22 @@ public class Ant {
 		}
 	}
 
-	public List<Integer> getCitiesNotVisited() {
-		return citiesNotVisited;
-	}
+	public List<Integer> getCitiesNotVisited() { return citiesNotVisited; }
 
-	public int[] getPath() {
-		return path;
-	}
+	public int[] getPath() { return path; }
 
-	public String[] getPathEdges() {
-		return pathEdges;
-	}
+	public String[] getPathEdges() { return pathEdges; }
 
-	public double getPathLength() {
-		return pathLength;
-	}
+	public double getPathLength() { return pathLength; }
 
-	public int getCurrCity() {
-		return path[currPathIndex-1];
-	}
+	public int getCurrCity() { return path[currPathIndex-1]; }
 
 	public void resetPath() {
 		pathLength = 0.0;
 		currPathIndex = 0;
 	}
 
-	public void updatePathLength(double amount) {
-		pathLength += amount;
-	}
+	public void updatePathLength(double amount) { pathLength += amount; }
 
 	// public static void addEdgeToPath(String edge) {
 	// 	pathEdges[currPathIndex] = edge;
@@ -76,8 +64,6 @@ public class Ant {
 		currPathIndex++;
 	}
 
-	public boolean isTourComplete() {
-		return citiesNotVisited.isEmpty();
-	}
+	public boolean isTourComplete() { return citiesNotVisited.isEmpty(); }
 
 }
