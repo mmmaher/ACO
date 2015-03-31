@@ -2,14 +2,17 @@ import java.io.*;
 import java.util.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.lang.Math;
 
 public class ACORunner {
+	private static final int ELITISM_IMPLEMENTATION = 1;
 
 	/* Algorithm constants */
 	private static int numAnts;
 	private static int numCities;
 	private static int numIterations;
 	private static int numEdges;
+	private static boolean elitist;
 
 	private static Problem problem;
 	private static HashMap<String, Edge> edges;
@@ -18,8 +21,8 @@ public class ACORunner {
 	private static double pheromoneFactor;
 	private static double heuristicFactor;
 	private static double evaporationFactor;
-	private static double wearingAwayFactor_1;
-	private static double wearingAwayFactor_2; 
+	private static double wearingAwayFactor_sigma;
+	private static double wearingAwayFactor_tauNot; 
 	private static double greedyFactor;
 
 	private static int[] bestTour;
@@ -28,13 +31,20 @@ public class ACORunner {
 
 	private static Random rand = new Random();
 
-	public ACORunner(Problem problem_, int numAnts_, int numIterations_) {
-		this.problem = problem_;
-		this.numCities = problem.getNumCities();
-		this.numAnts = numAnts_;
-		this.numIterations = numIterations_;
+
+	public ACORunner(Problem problem_, int numAnts_, int numIterations_, boolean elitist_) {
+		problem = problem_;
+		numCities = problem.cities.numCities();
+		numAnts = numAnts_;
+		numIterations = numIterations_;
+
 		initializeAnts();
 		initializeEdges();
+		if (elitist_) {
+			elitist = true;
+		} else {
+			elitist = false;
+		}
 	}
 	
 	/* Makes an edge between each city and every other city, and adds
@@ -47,7 +57,7 @@ public class ACORunner {
 		for (int i = 1; i < numCities; i++) {
 			for (int j = i + 1; j <= numCities; j++) {
 				temp_key = String.valueOf(i) + String.valueOf(j);
-				Edge temp = new Edge(problem.getCity(i), i, problem.getCity(j), j);
+				Edge temp = new Edge(problem.cities.getCity(i), problem.cities.getCity(j));
 				edges.put(temp_key, temp);
 			}
 		}
@@ -106,15 +116,9 @@ public class ACORunner {
 		// aka the function's denominator
 		for (Integer city : ant.getCitiesNotVisited()) {
 			Edge currEdge = edges.get(getEdgeKeyBetweenCities(currCity, city));
-
-			double value = (currEdge.getPheromoneLevel()) * (1/currEdge.getLength());
-			// TODO add in appropriate factors, wherever they go...
-
+			double value = Math.pow(currEdge.getPheromoneLevel(), pheromoneFactor) * Math.pow(1/currEdge.getLength(), heuristicFactor);
 			sum += value;
 		}
-
-		// TODO calculate the numerator... 
-
 		return sum;
 	}
 
@@ -122,7 +126,7 @@ public class ACORunner {
 	// this is incomplete
 	private static double calculateChoice(int fromCity, int toCity, double sumChoices) {
 		Edge edge = edges.get(getEdgeKeyBetweenCities(fromCity, toCity));
-		return edge.getPheromoneLevel() * 1/edge.getLength() / sumChoices;
+		return Math.pow(edge.getPheromoneLevel(), pheromoneFactor) * Math.pow(1/edge.getLength(), heuristicFactor) / sumChoices;
 	}
 
 	private static void findPaths() {
@@ -161,21 +165,22 @@ public class ACORunner {
 			// Now: add city to the path (also removes it frm list of unvisited), add the edge to path edges
 			// Add edge and city adds the city and edge, removes city frm list, and increments current index
 			ant.addEdgeAndCity(chosenCity, chosenEdge);
+			if (!elitist) {
+				updateEdgePheromone(edges.get(chosenEdge));
+			}
+			
 			
 		}
-
 	}
 
-	/* After the path is complete, the ants should retrace they're paths and deposit
-	the correct amount of pheromones. */
+	/* Called during the tour building process, every time an ant "chooses"
+	a path; updates the pheromone level 
+	τij = (1−ε)τij +ετ0  */
+
 	// TODO Not sure about what amount exactly they should update by
-	private static void retracePaths() {
-		for (Ant ant : ants) {
-			for (String edge : ant.getPathEdges()) {
-				double amount = 1/ant.getPathLength();
-				edges.get(edge).updatePheromoneLevel(amount);
-			}
-		}
+	private static void updateEdgePheromone(Edge edge) {
+		double amount = (1 - wearingAwayFactor_sigma) * edge.getPheromoneLevel() + wearingAwayFactor_sigma * wearingAwayFactor_tauNot;
+		edge.updatePheromoneLevel(amount);
 	}
 
 	/* Once tours are complete, clear the paths so the ants can begin again */
@@ -189,14 +194,14 @@ public class ACORunner {
 		}
 	}
 
-	/* Evaporates all the edges' pheromone levels by calculated amount*/
+	/* Evaporates all the edges' pheromone levels by calculated amount, called every iteration */
 	// TODO the formula to calc evaporationamount is not completely implemented
 	private static void evaporatePheromones() {
 		for (Map.Entry<String, Edge> entry : edges.entrySet()) {
+			//Pheromone evaporates the same in ACS and Elitist 
 			double newAmount = (1 - evaporationFactor) * entry.getValue().getPheromoneLevel();
 			entry.getValue().updatePheromoneLevel(newAmount);
-
-		    System.out.println(entry.getKey() + "/" + entry.getValue());
+			System.out.println(entry.getKey() + "/" + entry.getValue());
 		}
 	}
 
@@ -209,8 +214,6 @@ public class ACORunner {
 			for (int k = 0; k < numCities; k++) {
 				findPaths();
 			}
-
-			retracePaths();
 			clearPaths();
 			evaporatePheromones();
 

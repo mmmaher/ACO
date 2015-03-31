@@ -3,40 +3,16 @@ import java.io.*;
 
 public class Problem {
 	
-	private static double[][] cities;
-	private static int numCities;
+	public static Cities cities;
 
 	// file variable
 	private static BufferedReader reader = null;
 
 	public Problem() {
-		// cities = new ArrayList<Double[]>();
-	}
-
-	public static void addCity(int i, double[] city) {
-		double[] temp = {city[1], city[2]};
-		cities[i] = temp;
+		this.cities = new Cities();
 	}
 
 	public static int getFitness() { return 0; }
-
-	public static double[] getCity(int i) { return cities[i-1]; }
-
-	public static int getNumCities() { return numCities; }
-
-	public static double getX(int i) { return cities[i-1][0]; }
-
-	public static double getY(int i) { return cities[i-1][1]; }
-
-	public static void printAll() {
-		for (int i = 0; i < numCities; i++) {
-			printCity(cities[i]);
-		}
-	}
-
-	private static void printCity(double[] city) {
-		System.out.println(city[0] + ", " + city[1]);
-	}
 
 	public static void readFile(File f) {
 		
@@ -53,8 +29,7 @@ public class Problem {
 							numIndex = i;
 						}
 					}
-					numCities = Integer.parseInt(splitStr[numIndex+1]);
-					cities = new double[numCities][3];
+					//numCities = Integer.parseInt(splitStr[numIndex+1]);
 					continue;
 				} 
 				if (line.charAt(0) == 'N' || line.charAt(0) == 'C' ||
@@ -62,9 +37,8 @@ public class Problem {
 					continue;
 				}
 				
-				// Double[] temp = new Double[3];
-				double[] temp = new double[3];
 				int index = 0;
+				double x = 0, y = 0;
 				boolean started = false;
 				String num = "";
 				for (int i = 0; i < line.length(); i++) {
@@ -73,7 +47,7 @@ public class Problem {
 						continue;
 					}
 					if (letter.equals(" ")) {
-						temp[index] = Double.parseDouble(num);
+						x = Double.parseDouble(num);
 						num = "";
 						index++;
 						started = false;
@@ -82,8 +56,9 @@ public class Problem {
 					num = num + letter;
 					started = true;
 				}
-				temp[index] = Double.parseDouble(num);
-				addCity(counter, temp);
+				y = Double.parseDouble(num);
+				City newCity = new City(counter, x, y);
+				cities.addCity(counter, newCity);
 				counter++;
 
 			}

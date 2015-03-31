@@ -9,7 +9,9 @@ CLASSES = \
         ACORunner.java\
         Ant.java\
 	Edge.java\
-	Problem.java
+	Problem.java\
+	City.java\
+	Cities.java
 
 default: classes
 
