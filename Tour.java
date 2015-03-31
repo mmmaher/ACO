@@ -1,22 +1,22 @@
 import java.util.*;
 
 public class Tour {
-	private static final int ALPHA = 2;
-	private static final int BETA = 2;
+	private static final int WEARING_SIGMA = 2;
+	private static final int WEARING_TAUNOT = 2;
 
-	private int[] citiesVisited;
+	private int[] citiesVisited; //boolean value if city was visited
 	private int[] path;
 	private double tourLength;
 	private int numCities;
 	private Random rand = new Random();
 	private static Problem problem;
-	private boolean elite;
-	private static int prevCity;
+	private static boolean elitist;
+	private int prevCity;
 
-	public Tour(Problem problem, int numberOfCities, boolean elitism) {
-		this.problem = problem;
-		this.elite = elitism;
-		this.numCities = numberOfCities;
+	public Tour(Problem problem_, int numberOfCities_, boolean elitist_) {
+		this.problem = problem_;
+		this.elitist = elitist_;
+		this.numCities = numberOfCities_;
 
 		citiesVisited = new int[numCities];
 	}
@@ -39,15 +39,13 @@ public class Tour {
 
 			tourLength += problem.getLength(prevCity, currCity);
 
-			// wither away pheromone on edge if not elite
+			// withers away pheromone for each edge if ACS
+			if (!elitist) {
+				double amount = (1 - WEARING_SIGMA) * problem.getPheromone(prevCity, currCity) + WEARING_SIGMA * WEARING_TAUNOT;
+				problem.updatePheromoneLevel(prevCity, currCity, amount);
+			}
 
 			prevCity = currCity;
-		}
-	}
-
-	public void putDownPheromone() {
-		for (int i = 0; i < numCities; i++) {
-
 		}
 	}
 
@@ -91,4 +89,12 @@ public class Tour {
 		return 0;
 	}
 
+	// getters
+	public int[] getPath() {
+		return path;
+	}
+
+	public double getLength() {
+		return tourLength;
+	}
 }

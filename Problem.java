@@ -14,6 +14,24 @@ public class Problem {
 
 	public static int getFitness() { return 0; }
 
+	public static void updatePheromoneLevel(int start, int end, double value) {
+		// updates edge from start to end city with new pheromone value
+	}
+
+	public static double getLength(int start, int end) {
+		// returns distance between two cities
+		return 0.;
+	}
+
+	public static double getPheromone(int start, int end) {
+		// returns pheromone level on edge between two cities
+		return 0;
+	}
+
+	public static void evaporatePheromone() {
+		// evaporate all edges
+	}
+
 	public static void readFile(File f) {
 		
 		try {

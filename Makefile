@@ -11,7 +11,8 @@ CLASSES = \
 	Edge.java\
 	Problem.java\
 	City.java\
-	Cities.java
+	Cities.java\
+	Tour.java
 
 default: classes
 
