@@ -15,7 +15,6 @@ public class ACORunner {
 	private static boolean elitist;
 
 	private static Problem problem;
-	private static HashMap<String, Edge> edges;
 	private static ArrayList<Ant> ants;
 
 	private static double pheromoneFactor;
