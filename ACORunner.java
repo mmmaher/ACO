@@ -6,6 +6,7 @@ import java.lang.Math;
 
 public class ACORunner {
 	private static final int ELITISM_IMPLEMENTATION = 1;
+	private static final double QFACTOR = 5.; // TODO: CHANGE THIS FACTOR due to heuristic-found path length
 
 	/* Algorithm constants */
 	private static int numAnts;
@@ -25,7 +26,7 @@ public class ACORunner {
 	private static double greedyFactor;
 
 	private static int[] bestTour;
-	private static String[] bestTourEdges;
+	// private static String[] bestTourEdges;
 	private static double bestTourLength;
 
 	private static Random rand = new Random();
@@ -46,6 +47,7 @@ public class ACORunner {
 		}
 	}
 	
+	///************* MOVE TO Problem?
 	/* Makes an edge between each city and every other city, and adds
 	it to the global arraylist of edges. */
 	private static void initializeEdges() {
@@ -77,12 +79,12 @@ public class ACORunner {
 		System.out.println("Length: " + bestTourLength);
 	}
 
-	private static void startAnts() {
-		for (int i = 0; i < numAnts; i++) {
-			int temp = rand.nextInt(numCities) + 1;
-			ants.get(i).addCityToPath(temp);
-		}
-	}
+	// private static void startAnts() {
+	// 	for (int i = 0; i < numAnts; i++) {
+	// 		int temp = rand.nextInt(numCities) + 1;
+	// 		ants.get(i).addCityToPath(temp);
+	// 	}
+	// }
 
 	private static String getEdgeKeyBetweenCities(int city1, int city2) {
 		String edgeString;
@@ -96,106 +98,107 @@ public class ACORunner {
 		return edgeString;
 	}
 
-	private static int chooseSpecified(double num, double[] array) {
-		// sees where specified num falls in the array
-		for (int i = 0; i < array.length; i++) {
-			if (num < array[i]) {
-				return i;
-			}
-		}
-		System.out.println("ERROR HERE BAD, looking for "+num);
-		return 0;
-	}
+	// private static int chooseSpecified(double num, double[] array) {
+	// 	// sees where specified num falls in the array
+	// 	for (int i = 0; i < array.length; i++) {
+	// 		if (num < array[i]) {
+	// 			return i;
+	// 		}
+	// 	}
+	// 	System.out.println("ERROR HERE BAD, looking for "+num);
+	// 	return 0;
+	// }
 
-	private static double calcAllChoices(Ant ant) {
-		double sum = 0.0;
-		int currCity = ant.getCurrCity();
+	// private static double calcAllChoices(Ant ant) {
+	// 	double sum = 0.0;
+	// 	int currCity = ant.getCurrCity();
 
-		// calculate the sum of all the choices probabilities, 
-		// aka the function's denominator
-		for (Integer city : ant.getCitiesNotVisited()) {
-			Edge currEdge = edges.get(getEdgeKeyBetweenCities(currCity, city));
-			double value = Math.pow(currEdge.getPheromoneLevel(), pheromoneFactor) * Math.pow(1/currEdge.getLength(), heuristicFactor);
-			sum += value;
-		}
-		return sum;
-	}
+	// 	// calculate the sum of all the choices probabilities, 
+	// 	// aka the function's denominator
+	// 	for (Integer city : ant.getCitiesNotVisited()) {
+	// 		Edge currEdge = edges.get(getEdgeKeyBetweenCities(currCity, city));
+	// 		double value = Math.pow(currEdge.getPheromoneLevel(), pheromoneFactor) * Math.pow(1/currEdge.getLength(), heuristicFactor);
+	// 		sum += value;
+	// 	}
+	// 	return sum;
+	// }
 
 	// TODO check the algorithm implementation and add in appropriate factors
 	// this is incomplete
-	private static double calculateChoice(int fromCity, int toCity, double sumChoices) {
-		Edge edge = edges.get(getEdgeKeyBetweenCities(fromCity, toCity));
-		return Math.pow(edge.getPheromoneLevel(), pheromoneFactor) * Math.pow(1/edge.getLength(), heuristicFactor) / sumChoices;
-	}
+	// private static double calculateChoice(int fromCity, int toCity, double sumChoices) {
+	// 	Edge edge = edges.get(getEdgeKeyBetweenCities(fromCity, toCity));
+	// 	return Math.pow(edge.getPheromoneLevel(), pheromoneFactor) * Math.pow(1/edge.getLength(), heuristicFactor) / sumChoices;
+	// }
 
-	private static void findPaths() {
-		double min_value = Double.MAX_VALUE;
-		double max_value = -1;
-		double randomNum;
+	// private static void findPaths() {
+	// 	double min_value = Double.MAX_VALUE;
+	// 	double max_value = -1;
+	// 	double randomNum;
 
-		for (Ant ant : ants) {
-			double sum = 0.0;
-			// Sums will correspond to the index of the city in the list of uncvisited cities
-			double sums[] = new double[ant.getCitiesNotVisited().size()];
-			double totalChoiceSum = calcAllChoices(ant);
-			for (int i = 0; i < ant.getCitiesNotVisited().size(); i++) {
-				sum += calculateChoice(ant.getCurrCity(), ant.getCitiesNotVisited().get(i), totalChoiceSum);
-				sums[i] = sum;
+	// 	for (Ant ant : ants) {
+	// 		double sum = 0.0;
+	// 		// Sums will correspond to the index of the city in the list of uncvisited cities
+	// 		double sums[] = new double[ant.getCitiesNotVisited().size()];
+	// 		double totalChoiceSum = calcAllChoices(ant);
+	// 		for (int i = 0; i < ant.getCitiesNotVisited().size(); i++) {
+	// 			sum += calculateChoice(ant.getCurrCity(), ant.getCitiesNotVisited().get(i), totalChoiceSum);
+	// 			sums[i] = sum;
 
-				if (sum < min_value) {
-					min_value = sum;
-				}
-				if (sum > max_value) {
-					max_value = sum;
-				}
+	// 			if (sum < min_value) {
+	// 				min_value = sum;
+	// 			}
+	// 			if (sum > max_value) {
+	// 				max_value = sum;
+	// 			}
 
-			}
-			randomNum = (rand.nextDouble() * (max_value - min_value)) + min_value;
+	// 		}
+	// 		randomNum = (rand.nextDouble() * (max_value - min_value)) + min_value;
 
-			// Chosenone should be the index value of the city to be removed
-			int chosenIndex = chooseSpecified(randomNum, sums);
-			int chosenCity = ant.getCitiesNotVisited().get(chosenIndex);
-			String chosenEdge = getEdgeKeyBetweenCities(ant.getCurrCity(), chosenCity);
+	// 		// Chosenone should be the index value of the city to be removed
+	// 		int chosenIndex = chooseSpecified(randomNum, sums);
+	// 		int chosenCity = ant.getCitiesNotVisited().get(chosenIndex);
+	// 		String chosenEdge = getEdgeKeyBetweenCities(ant.getCurrCity(), chosenCity);
 
-			// So at this point...
-			// chosenIndex - holds index of the city in the citiesNotVisited list
-			// chosenCity - is the actual integer value at that index, so the city that was chosen
-			// chosenEdge - the edge key between the ants current city, and the chosen city
-			// Now: add city to the path (also removes it frm list of unvisited), add the edge to path edges
-			// Add edge and city adds the city and edge, removes city frm list, and increments current index
-			ant.addEdgeAndCity(chosenCity, chosenEdge);
-			if (!elitist) {
-				updateEdgePheromone(edges.get(chosenEdge));
-			}
+	// 		// So at this point...
+	// 		// chosenIndex - holds index of the city in the citiesNotVisited list
+	// 		// chosenCity - is the actual integer value at that index, so the city that was chosen
+	// 		// chosenEdge - the edge key between the ants current city, and the chosen city
+	// 		// Now: add city to the path (also removes it frm list of unvisited), add the edge to path edges
+	// 		// Add edge and city adds the city and edge, removes city frm list, and increments current index
+	// 		ant.addEdgeAndCity(chosenCity, chosenEdge);
+	// 		if (!elitist) {
+	// 			updateEdgePheromone(edges.get(chosenEdge));
+	// 		}
 			
 			
-		}
-	}
+	// 	}
+	// }
 
 	/* Called during the tour building process, every time an ant "chooses"
 	a path; updates the pheromone level 
 	τij = (1−ε)τij +ετ0  */
 
-	// TODO Not sure about what amount exactly they should update by
-	private static void updateEdgePheromone(Edge edge) {
-		double amount = (1 - wearingAwayFactor_sigma) * edge.getPheromoneLevel() + wearingAwayFactor_sigma * wearingAwayFactor_tauNot;
-		edge.updatePheromoneLevel(amount);
-	}
+	// // TODO Not sure about what amount exactly they should update by
+	// private static void updateEdgePheromone(Edge edge) {
+	// 	double amount = (1 - wearingAwayFactor_sigma) * edge.getPheromoneLevel() + wearingAwayFactor_sigma * wearingAwayFactor_tauNot;
+	// 	edge.updatePheromoneLevel(amount);
+	// }
 
 	/* Once tours are complete, clear the paths so the ants can begin again */
-	private static void clearPaths() {
-		for (Ant ant : ants) {
-			if (ant.isTourComplete()) {
-				ant.resetNotVisited();
-			} else {
-				System.out.println("ERROR list isn't empty");
-			}
-		}
-	}
+	// private static void clearPaths() {
+	// 	for (Ant ant : ants) {
+	// 		if (ant.isTourComplete()) {
+	// 			ant.resetNotVisited();
+	// 		} else {
+	// 			System.out.println("ERROR list isn't empty");
+	// 		}
+	// 	}
+	// }
 
+	// ***************MOVE TO PROBLEM?
 	/* Evaporates all the edges' pheromone levels by calculated amount, called every iteration */
 	// TODO the formula to calc evaporationamount is not completely implemented
-	private static void evaporatePheromones() {
+	private static void evaporatePheromone() {
 		for (Map.Entry<String, Edge> entry : edges.entrySet()) {
 			//Pheromone evaporates the same in ACS and Elitist 
 			double newAmount = (1 - evaporationFactor) * entry.getValue().getPheromoneLevel();
@@ -204,23 +207,61 @@ public class ACORunner {
 		}
 	}
 
-	public static void run() {
-
-		for (int i = 0; i < numIterations; i++) {
-			startAnts();
-
-			// For loop should be equal to the path length, and path must contain every city
-			for (int k = 0; k < numCities; k++) {
-				findPaths();
-			}
-			clearPaths();
-			evaporatePheromones();
-
-
-
+	private static void putPheromoneOnBest(int[] p, double len) {
+		double value = QFACTOR / len;
+		for (int i = 1; i < numCities; i++) {
+			problem.updatePheromoneLevel(p[i-1], p[i], value);
 		}
-
 	}
 
+	public static void run() {
 
+		// run as many times as we have iterations
+		for (int i = 0; i < numIterations; i++) {
+			double iterationBestLength = Double.MAX_VALUE;
+			int[] iterationBest = new int[numCities];
+
+			// run tours for each ant
+			for (int j = 0; j < numAnts; j++) {
+				ants.get(j).newTour(problem, elitist);
+				double currLength = ants.get(i).getPathLength();
+
+				if (currLength < bestTourLength) {
+					iterationBestLength = currLength;
+					iterationBest = ants.get(j).getPath();
+				}
+			}
+
+			// first evaporate pheromones
+			problem.evaporatePheromone();
+
+			// if elitist, put down pheromone for each ant
+			if (elitist) { 
+				for (int j = 0; j < numAnts; j++) {
+					ants.get(j).addPheromoneToPath(problem, QFACTOR);
+				}
+			}
+
+			// put pheromone down on best path
+			putPheromoneOnBest(iterationBest, iterationBestLength);
+
+			if (iterationBestLength < bestTourLength) {
+				bestTourLength = iterationBestLength;
+				bestTour = iterationBest;
+			}
+		}
+
+
+		// for (int i = 0; i < numIterations; i++) {
+		// 	startAnts();
+
+		// 	// For loop should be equal to the path length, and path must contain every city
+		// 	for (int k = 0; k < numCities; k++) {
+		// 		findPaths();
+		// 	}
+		// 	clearPaths();
+		// 	evaporatePheromones();
+
+
+	}
 }
