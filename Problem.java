@@ -3,7 +3,6 @@ import java.util.regex.*;
 import java.io.*;
 
 public class Problem extends Graph{
-	
 
 	//Instance variables
 	//public static Graph graph;
@@ -11,7 +10,6 @@ public class Problem extends Graph{
 
 	// file variable
 	private static BufferedReader reader = null;
-
 
 	// Constructor, reads file and creates cities and graph
 	public Problem(File f) {
@@ -21,26 +19,6 @@ public class Problem extends Graph{
 		this.cities.printCities();
 		super.initGraph(cities);
 	}
-
-/*
-	// updates edge from start to end city with new pheromone value
-	public void updatePheromoneLevel(City c1, City c2, double value) { 
-		this.graph.updatePheromoneLevel(c1, c2, value); 
-	}
-
-	// returns distance between two cities
-	public double getLength(City c1, City c2) {
-		return this.graph.getLength(c1, c2);
-	}
-
-	// returns pheromone level on edge between two cities
-	public double getPheromone(City c1, City c2) {
-		return this.graph.getPheromone(c1, c2);
-	}
-
-	// Evaporate pheromone on all edges in the graph
-	public void evaporatePheromone(double evapFactor) { this.graph.evaporatePheromone(evapFactor); }
-*/
 
 	// Read in a TSP file
 	public void readFile(File f) {

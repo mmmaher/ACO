@@ -57,6 +57,6 @@ public class ACO {
 		*/
 		
 		prob = new Problem(file);
-		prob.printGraph();		
+		prob.printGraph();
 	}
 }

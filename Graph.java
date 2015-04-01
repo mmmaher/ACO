@@ -31,18 +31,6 @@ public class Graph {
 	}
 
 
-	// Update pheromone level between two cities
-	public void updatePheromoneLevel(City c1, City c2, double value) {
-		this.graph.get(c1.getID()).get(c2.getID()).updatePheromoneLevel(value);
-	}
-
-
-	// Get pheromone level between two cities
-	public double getPheromone(City c1, City c2) {
-		return this.graph.get(c1.getID()).get(c2.getID()).getPheromoneLevel();
-	}
-
-
 	// Get length between two cities. 
 	public double getLength(City c1, City c2) {
 		return this.graph.get(c1.getID()).get(c2.getID()).getLength();
@@ -56,6 +44,18 @@ public class Graph {
 			temp.add(edgePair.getValue());
 		}
 		return temp;
+	}
+
+
+	// Update pheromone level between two cities
+	public void updatePheromone(City c1, City c2, double value) {
+		this.graph.get(c1.getID()).get(c2.getID()).updatePheromoneLevel(value);
+	}
+
+
+	// Get pheromone level between two cities
+	public double getPheromone(City c1, City c2) {
+		return this.graph.get(c1.getID()).get(c2.getID()).getPheromoneLevel();
 	}
 
 
