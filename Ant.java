@@ -1,87 +1,74 @@
 import java.io.*;
 import java.util.*;
-import java.util.List;
-import java.util.ArrayList;
 
 public class Ant {
-	
-	/* Citiesnotvisited holds the indices of the cities yet to be visited;
-	path holds the string keys of the edges already visited */ 
-	// private List<Integer> citiesNotVisited;
-	private int[] path;
-	// private String[] pathEdges;
-	private double pathLength;
-	// private int currPathIndex, numCities;
-	private int numCities;
 
-	public Ant(int numCities_) {
-		this.numCities = numCities_;
-		// citiesNotVisited = new ArrayList<Integer>();
-		// resetNotVisited();
-		path = new int[numCities];
-		// pathEdges = new String[numCities];
-		// currPathIndex = 0;
-		pathLength = 0.0;
+	public Tour tour;
+	private City currCity;
+
+	private static Random rand = new Random();
+
+	public Ant() {
+		tour = new Tour();
+
 	}
 
-	public int[] getPath() { return path; }
-
-	public double getPathLength() { return pathLength; }
-
-	public void newTour(Problem problem, boolean elitist) {
-		Tour tour = new Tour(problem, numCities, elitist);
-		tour.beginNewTour();
-		path = tour.getPath();
-		pathLength = tour.getLength();
+	public City startCity(City city) {
+		currCity = city;
+		tour.resetTour();
+		tour.addCityToTour(city, 0.0);
 	}
 
-	// ant retraces path and adds pheromone
-	public void addPheromoneToPath(Problem problem, double q) {
-		if (path.length < 2)  return;
+	public City getCurrentCity() {
+		return currCity;
+	}
 
-		double value = q / pathLength;
-		for (int i = 1; i < numCities; i++) {
-			problem.updatePheromoneLevel(path[i-1], path[i], value);
+	private City getOtherCity(Edge edge) {
+		City[] citiesTemp = edge.getEndCities();
+		if (citiesTemp[0] == currCity) { return citiesTemp[1]; }
+		else { return citiesTemp[0]; }
+	}
+
+	public Edge moveToNext(ArrayList<Edge> edges) {
+		ArrayList<Double> probabilities = new ArrayList<Double>();
+		double sumPherLen = 0.;
+		double sumProbs = 0.;
+		City city;
+
+		// first calculate probabilities of choosing each possible next city
+		for (Edge edge : edges) {
+			city = getOtherCity(edge);
+
+			if (tour.cityAlreadyInTour(city)) continue;
+
+			probabilities.add(edge.getPheromoneLevel() * edge.getLength());
+			sumPherLen+=probabilities.get(probabilities.size()-1);
 		}
+
+		// then update probabilities to divide by sumPherLen
+		for (int i = 0; i < probabilities.size(); i++) {
+			sumProbs += probabilities.get(i) / sumPherLen;
+			probabilities.set(i, sumProbs);
+		}
+
+		// choose new path "randomly", weighted with probs just assigned
+		double value = rand.nextDouble() * sumProbs;
+		Edge chosenEdge = edges.get(chooseSpecified(value, probabilities));
+
+		currCity = getOtherCity(chosenEdge);
+		tour.addCityToTour(currCity, chosenEdge.getLength());
+
+		return (chosenEdge);
 	}
 
-	// public void resetNotVisited() {
-	// 	for (int i = 1; i <= numCities; i++) {
-	// 		citiesNotVisited.add(i);
-	// 	}
-	// }
-
-	// public List<Integer> getCitiesNotVisited() { return citiesNotVisited; }
-
-	// public String[] getPathEdges() { return pathEdges; }
-
-	// public int getCurrCity() { return path[currPathIndex-1]; }
-
-	// public void resetPath() {
-	// 	pathLength = 0.0;
-	// 	currPathIndex = 0;
-	// }
-
-	// public void updatePathLength(double amount) { pathLength += amount; }
-
-	// public static void addEdgeToPath(String edge) {
-	// 	pathEdges[currPathIndex] = edge;
-	// 	currPathIndex++;
-	// }
-
-	// public void addCityToPath(int city) {
-	// 	citiesNotVisited.remove(Integer.valueOf(city));
-	// 	path[currPathIndex] = city;
-	// 	currPathIndex++;
-	// }
-
-	// public void addEdgeAndCity(int city, String edge) {
-	// 	citiesNotVisited.remove(Integer.valueOf(city));
-	// 	path[currPathIndex] = city;
-	// 	pathEdges[currPathIndex] = edge;
-	// 	currPathIndex++;
-	// }
-
-	// public boolean isTourComplete() { return citiesNotVisited.isEmpty(); }
-
+	private int chooseSpecified(double num, ArrayList<Double> a) {
+		// sees where specified num falls in the array
+		for (int i = 0; i < a.size(); i++) {
+			if (num < a.get(i)) {
+				return i;
+			}
+		}
+		System.out.println("ERROR HERE BAD, looking for "+num);
+		return 0;
+	}
 }
