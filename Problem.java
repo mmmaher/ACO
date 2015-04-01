@@ -1,15 +1,18 @@
 import java.util.*;
+import java.util.regex.*;
 import java.io.*;
 
-public class Problem {
+public class Problem extends Edges{
 	
 	public static Cities cities;
+	public static Edges edges;
 
 	// file variable
 	private static BufferedReader reader = null;
 
 	public Problem() {
 		this.cities = new Cities();
+		this.edges = new Edges();
 	}
 
 	public static int getFitness() { return 0; }
@@ -39,21 +42,8 @@ public class Problem {
 			String line;
 			int counter = 0;
 			while ((line = reader.readLine()) != null) {
-				if (line.charAt(0) == 'D') {
-					String[] splitStr = line.split(" ");
-					int numIndex = 0;
-					for (int i = 0; i < splitStr.length; i++) {
-						if (splitStr[i].contains(":")) {
-							numIndex = i;
-						}
-					}
-					//numCities = Integer.parseInt(splitStr[numIndex+1]);
-					continue;
-				} 
-				if (line.charAt(0) == 'N' || line.charAt(0) == 'C' ||
-					line.charAt(0) == 'T' || line.charAt(0) == 'E') {
-					continue;
-				}
+				String pattern = "([A-Z]).*";
+				if (Pattern.matches(pattern, line)) { continue; }
 				
 				int index = 0;
 				double x = 0, y = 0;
@@ -87,8 +77,21 @@ public class Problem {
 			e.printStackTrace();
 		}
 	}
+	
+		
+	public void initializeEdges() {
 
-	public static void main(String[] args) {
+		String edgeKey;
+		int numCities = this.cities.numCities();
 
+		for (int i = 1; i < numCities; i++) {
+			for (int j = i ; j < numCities; j++) {
+				if ( j != i) {
+					Edge newEdge = new Edge(cities.getCity(i), cities.getCity(j));
+					this.edges.addEdge(createKeyWithIDs(i,j), newEdge);
+				}
+			}
+		}
 	}
+
 }

@@ -39,7 +39,7 @@ public class ACORunner {
 		numIterations = numIterations_;
 
 		initializeAnts();
-		initializeEdges();
+		//initializeEdges();
 		if (elitist_) {
 			elitist = true;
 		} else {
@@ -49,20 +49,23 @@ public class ACORunner {
 	
 	///************* MOVE TO Problem?
 	/* Makes an edge between each city and every other city, and adds
-	it to the global arraylist of edges. */
+	it to the global arraylist of edges.
 	private static void initializeEdges() {
 		numEdges = (numCities * (numCities - 1))/2;
 		edges = new HashMap<String, Edge>();
 		String temp_key;
 
 		for (int i = 1; i < numCities; i++) {
-			for (int j = i + 1; j <= numCities; j++) {
-				temp_key = String.valueOf(i) + String.valueOf(j);
-				Edge temp = new Edge(problem.cities.getCity(i), problem.cities.getCity(j));
-				edges.put(temp_key, temp);
+			for (int j = i ; j < numCities; j++) {
+				if ( j != i) {
+					temp_key = String.valueOf(i) + String.valueOf(j);
+					Edge temp = new Edge(problem.cities.getCity(i), problem.cities.getCity(j));
+					edges.put(temp_key, temp);
+				}
 			}
 		}
 	}
+	*/
 
 	private static void initializeAnts() {
 		for (int i = 0; i < numAnts; i++) {
@@ -84,9 +87,10 @@ public class ACORunner {
 	// 		int temp = rand.nextInt(numCities) + 1;
 	// 		ants.get(i).addCityToPath(temp);
 	// 	}
-	// }
-
-	private static String getEdgeKeyBetweenCities(int city1, int city2) {
+	// }	
+	
+	/*
+ 	private static String getEdgeKeyBetweenCities(int city1, int city2) {
 		String edgeString;
 		if (city1 < city2) {
 			edgeString = String.valueOf(city1) + String.valueOf(city2);
@@ -97,6 +101,7 @@ public class ACORunner {
 		// Edge edge = edges.get(edgeString);
 		return edgeString;
 	}
+	*/
 
 	// private static int chooseSpecified(double num, double[] array) {
 	// 	// sees where specified num falls in the array
@@ -198,6 +203,7 @@ public class ACORunner {
 	// ***************MOVE TO PROBLEM?
 	/* Evaporates all the edges' pheromone levels by calculated amount, called every iteration */
 	// TODO the formula to calc evaporationamount is not completely implemented
+	/*
 	private static void evaporatePheromone() {
 		for (Map.Entry<String, Edge> entry : edges.entrySet()) {
 			//Pheromone evaporates the same in ACS and Elitist 
@@ -206,7 +212,8 @@ public class ACORunner {
 			System.out.println(entry.getKey() + "/" + entry.getValue());
 		}
 	}
-
+	*/
+	
 	private static void putPheromoneOnBest(int[] p, double len) {
 		double value = QFACTOR / len;
 		for (int i = 1; i < numCities; i++) {
