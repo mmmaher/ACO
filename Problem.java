@@ -2,40 +2,48 @@ import java.util.*;
 import java.util.regex.*;
 import java.io.*;
 
-public class Problem extends Edges{
+public class Problem extends Graph{
 	
+
+	//Instance variables
+	//public static Graph graph;
 	public static Cities cities;
-	public static Edges edges;
 
 	// file variable
 	private static BufferedReader reader = null;
 
-	public Problem() {
+
+	// Constructor, reads file and creates cities and graph
+	public Problem(File f) {
+		super(cities);
 		this.cities = new Cities();
-		this.edges = new Edges();
+		this.readFile(f);
+		this.cities.printCities();
+		super.initGraph(cities);
 	}
 
-	public static int getFitness() { return 0; }
-
-	public static void updatePheromoneLevel(int start, int end, double value) {
-		// updates edge from start to end city with new pheromone value
+/*
+	// updates edge from start to end city with new pheromone value
+	public void updatePheromoneLevel(City c1, City c2, double value) { 
+		this.graph.updatePheromoneLevel(c1, c2, value); 
 	}
 
-	public static double getLength(int start, int end) {
-		// returns distance between two cities
-		return 0.;
+	// returns distance between two cities
+	public double getLength(City c1, City c2) {
+		return this.graph.getLength(c1, c2);
 	}
 
-	public static double getPheromone(int start, int end) {
-		// returns pheromone level on edge between two cities
-		return 0;
+	// returns pheromone level on edge between two cities
+	public double getPheromone(City c1, City c2) {
+		return this.graph.getPheromone(c1, c2);
 	}
 
-	public static void evaporatePheromone() {
-		// evaporate all edges
-	}
+	// Evaporate pheromone on all edges in the graph
+	public void evaporatePheromone(double evapFactor) { this.graph.evaporatePheromone(evapFactor); }
+*/
 
-	public static void readFile(File f) {
+	// Read in a TSP file
+	public void readFile(File f) {
 		
 		try {
 			reader = new BufferedReader(new FileReader(f));
@@ -77,21 +85,4 @@ public class Problem extends Edges{
 			e.printStackTrace();
 		}
 	}
-	
-		
-	public void initializeEdges() {
-
-		String edgeKey;
-		int numCities = this.cities.numCities();
-
-		for (int i = 1; i < numCities; i++) {
-			for (int j = i ; j < numCities; j++) {
-				if ( j != i) {
-					Edge newEdge = new Edge(cities.getCity(i), cities.getCity(j));
-					this.edges.addEdge(createKeyWithIDs(i,j), newEdge);
-				}
-			}
-		}
-	}
-
 }

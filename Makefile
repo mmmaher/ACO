@@ -12,7 +12,8 @@ CLASSES = \
 	Problem.java\
 	City.java\
 	Cities.java\
-	Tour.java
+	Tour.java\
+	Graph.java
 
 default: classes
 

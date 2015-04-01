@@ -1,6 +1,23 @@
 import java.util.*;
 
 public class Tour {
+
+
+	private List<City> tour = new ArrayList<City>();
+	private int length;
+
+
+	public Tour() 
+
+	public addCityToTour()
+
+	public checkCityInTour()
+
+	public resetTour()
+
+	public getTourLength()
+
+
 	private static final int WEARING_SIGMA = 2;
 	private static final int WEARING_TAUNOT = 2;
 
