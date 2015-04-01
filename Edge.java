@@ -4,33 +4,43 @@ import static java.lang.Math.*;
 
 public class Edge {
 
-	private City[] endCities;
+	private City[] cities;
 	private double length;
 	private double pheromoneLevel;
-
-	private double computeLength(double x1, double y1, double x2, double y2) {
-		return sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2));
-	}
 
 	//public Edge(double[] city1, int index1, double[] city2, int index2) {
 	public Edge(City city1, City city2) {
 		
-		endCities = new City[] { city1, city2};
-		length = computeLength(city1.getX(), city1.getY(), city2.getX(), city2.getY());
+		if ((city1 != null) && (city2 != null)) {
+			this.cities = new City[] { city1, city2};
+			this.length = computeLength();
+		} else {
+			System.out.println("ERROR: tried to create edge with NULL city");
+			this.length = 0;
+		}
 
 		/* All edges are given a minimum level of pheromone to start with */
-		pheromoneLevel = 0.01;
+		this.pheromoneLevel = 0.01;
 	}
 
-	public double getLength() { return this.length; }
+	private double computeLength() {
+ 
+ 		City c1 = this.cities[0];
+ 		City c2 = this.cities[1];
+ 		return sqrt(pow(c2.getX() - c1.getX(), 2) + pow(c2.getY() - c1.getY(), 2));
+	}
 
-	public City[] getEndCities() { return this.endCities; }
+	public City startCity() { return this.cities[0]; }
+
+	public City endCity() { return this.cities[1];}
+
+	public double getLength() { return this.length; }
 
 	public double getPheromoneLevel() { return this.pheromoneLevel; }
 
 	public void updatePheromoneLevel(double amount) { this.pheromoneLevel = amount; }
 
 	public void printEdge() {
-		System.out.println("Edge between city " + endCities[0].getID() + " and city " + endCities[1].getID());
+		System.out.println("Edge between city " + cities[0].getID() + " and city " + cities[1].getID());
 	}
 }

@@ -5,7 +5,6 @@ public class Cities {
 
 	private static Map<Integer,City> cities;
 	
-	
 	public Cities() { this.cities = new HashMap<Integer, City>(); }
 	
 	
@@ -18,8 +17,7 @@ public class Cities {
 			printCity(i);
 		}
 	}
-	
-	
+
 	private void printCity(int id) {
 		City temp = this.cities.get(id);
 		System.out.println(temp.getX() + ", " + temp.getY());

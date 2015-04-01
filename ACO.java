@@ -56,11 +56,7 @@ public class ACO {
 		}
 		*/
 		
-		prob = new Problem();
-		prob.readFile(file);
-		prob.cities.printCities();
-		prob.initializeEdges();
-		
-		
+		prob = new Problem(file);
+		prob.printGraph();
 	}
 }
