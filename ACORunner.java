@@ -3,10 +3,14 @@ import java.util.*;
 import java.lang.Math;
 
 public class ACORunner {
-	private static final double QFACTOR = 1.;
 	private static final double WEARING_SIGMA = 1.;
 	private static final double WEARING_TAUNOT = 1.;
-	private static final double EVAP = 1.;
+
+	private static double alpha; // pheromone trail importance
+	private static double beta; // distance between cities importance
+	private static double phi; // local pheromone update
+	private static double rho; // global pheromone update
+	private static double qo; // prob ant will choose best leg next
 
 	private ArrayList<Ant> ants = new ArrayList<Ant>();
 	private Problem problem;
@@ -22,17 +26,17 @@ public class ACORunner {
 
 	private static Random rand = new Random();
 
-	public ACORunner(Problem problem_, int numAnts_, int numIterations_, boolean elitist_) {
-		// double alpha_, double beta_, double phi_, double rho_) {
+	public ACORunner(Problem problem_, int numAnts_, int numIterations_, boolean elitist_,
+		double alpha_, double beta_, double phi_, double rho_) {
 		problem = problem_;
 		numAnts = numAnts_;
 		numIterations = numIterations_;
 		numCities = problem.cities.numCities();
 
-		// alpha = alpha_;
-		// beta = beta_;
-		// phi = phi_;
-		// rho = rho_;
+		alpha = alpha_;
+		beta = beta_;
+		phi = phi_;
+		rho = rho_;
 
 		if (elitist_) {
 			elitist = true;
@@ -87,7 +91,7 @@ public class ACORunner {
 	private void placePheromone(Ant ant) {
 		ArrayList<City> path = new ArrayList<City>();
 		path.addAll(ant.tour.getTour());
-		double value = QFACTOR / ant.tour.getLength();
+		double value = beta / ant.tour.getLength(); // BETA HERE***
 		
 		for (int j = 1; j < path.size(); j++) { //assumes >1 city
 			problem.updatePheromone(path.get(j-1), path.get(j), value);
@@ -120,7 +124,7 @@ public class ACORunner {
 			}
 
 			// first evaporate pheromones
-			problem.evaporatePheromone(EVAP);
+			problem.evaporatePheromone(rho); // rho HERE***
 
 			// if elitist, put down pheromone for each ant
 			if (elitist) { retraceAntTour(); }

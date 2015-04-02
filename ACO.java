@@ -16,8 +16,9 @@ import java.util.*;
 
 public class ACO {
 	
-	// Problem class
+	// Problem + Runner class
 	private static Problem prob;
+	private static ACORunner runner;
 
 	//File Variables
 	private static File file;
@@ -32,31 +33,32 @@ public class ACO {
 	private static double beta; // distance between cities importance
 	private static double phi; // local pheromone update
 	private static double rho; // global pheromone update
-	private static double elitism;
+	private static double qo; // probability in ACS that ant will choose best edge
+	private static boolean elitism;
 
 	//Main method
 	public static void main(String[] args) {
 		
 		file = new File(args[0]);
-		//elitism = args([8]);
-		//numAnts = Integer.parseInt(args[1]);
-		//alpha = Double.parseDouble(args[2]);
-		//beta = Double.parseDouble(args[3]);
+		numAnts = Integer.parseInt(args[1]);
+		alpha = Double.parseDouble(args[2]);
+		beta = Double.parseDouble(args[3]);
+		phi = Double.parseDouble(args[4]);
+		rho = Double.parseDouble(args[5]);
+
+		// String elite = args([7]);
 		
-		/*
-		if (elitism.equals("el") {
-				
-				
-		} else if (elitism.equals("ne") {
-				
-				
-		} else {
-			System.out.println("Invalid input");
-			System.exit(0);
-		}
-		*/
+		// if (elite.equals("el")) {
+		// 	elitism = true;
+		// } else if (elite.equals("ne")) {
+		// 	elitism = false;
+		// } else {
+		// 	System.out.println("Invalid input");
+		// 	System.exit(0);
+		// }
 		
 		prob = new Problem(file);
-		prob.printGraph();
+		// runner = new ACORunner(.......);
+		
 	}
 }
