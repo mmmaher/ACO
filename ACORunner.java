@@ -6,6 +6,7 @@ public class ACORunner {
 	private static final double QFACTOR = 1.;
 	private static final double WEARING_SIGMA = 1.;
 	private static final double WEARING_TAUNOT = 1.;
+	private static final double EVAP = 1.;
 
 	private ArrayList<Ant> ants = new ArrayList<Ant>();
 	private Problem problem;
@@ -22,10 +23,16 @@ public class ACORunner {
 	private static Random rand = new Random();
 
 	public ACORunner(Problem problem_, int numAnts_, int numIterations_, boolean elitist_) {
+		// double alpha_, double beta_, double phi_, double rho_) {
 		problem = problem_;
 		numAnts = numAnts_;
 		numIterations = numIterations_;
-		numCities = problem.numCities;
+		numCities = problem.cities.numCities();
+
+		// alpha = alpha_;
+		// beta = beta_;
+		// phi = phi_;
+		// rho = rho_;
 
 		if (elitist_) {
 			elitist = true;
@@ -61,14 +68,14 @@ public class ACORunner {
 		// move ant to a new city numCities - 1 times
 		for (int i = 1; i < numCities; i++) {
 			ArrayList<Edge> availableEdges = new ArrayList<Edge>();
-			availableEdges.addAll(problem.getEdges(currCity));
+			availableEdges.addAll(problem.getCityEdges(currCity));
 
 			// tempEdge = edge the ant chooses to move on
 			Edge tempEdge = ant.moveToNext(availableEdges);
 			
 			if (!elitist) {
 				// wear away pheromone if ACS
-				double amount = (1 - WEARING_SIGMA) * problem.getPheromone(tempEdge) + WEARING_SIGMA * WEARING_TAUNOT;
+				double amount = (1 - WEARING_SIGMA) * tempEdge.getPheromoneLevel() + WEARING_SIGMA * WEARING_TAUNOT;
 				tempEdge.updatePheromoneLevel(amount);
 			}
 			currCity = ant.getCurrentCity();
@@ -79,11 +86,11 @@ public class ACORunner {
 
 	private void placePheromone(Ant ant) {
 		ArrayList<City> path = new ArrayList<City>();
-		path = ant.tour.getTour();
+		path.addAll(ant.tour.getTour());
 		double value = QFACTOR / ant.tour.getLength();
 		
 		for (int j = 1; j < path.size(); j++) { //assumes >1 city
-			problem.updatePheromone(path.get(i-1), path.get(i), value);
+			problem.updatePheromone(path.get(j-1), path.get(j), value);
 		}
 	}
 
@@ -113,7 +120,7 @@ public class ACORunner {
 			}
 
 			// first evaporate pheromones
-			problem.evaporatePheromone();
+			problem.evaporatePheromone(EVAP);
 
 			// if elitist, put down pheromone for each ant
 			if (elitist) { retraceAntTour(); }

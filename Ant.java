@@ -13,7 +13,7 @@ public class Ant {
 
 	}
 
-	public City startCity(City city) {
+	public void startCity(City city) {
 		currCity = city;
 		tour.resetTour();
 		tour.addCityToTour(city, 0.0);
@@ -24,9 +24,8 @@ public class Ant {
 	}
 
 	private City getOtherCity(Edge edge) {
-		City[] citiesTemp = edge.getEndCities();
-		if (citiesTemp[0] == currCity) { return citiesTemp[1]; }
-		else { return citiesTemp[0]; }
+		if (currCity == edge.startCity()) { return edge.endCity(); }
+		else { return edge.startCity(); }
 	}
 
 	public Edge moveToNext(ArrayList<Edge> edges) {
