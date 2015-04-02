@@ -28,8 +28,32 @@ public class Ant {
 		else { return edge.startCity(); }
 	}
 
+	public Edge trivialMove(ArrayList<Edge> edges) {
+		Edge chosenEdge = null;
+		City city;
+		double minLength = Double.MAX_VALUE;
+
+		// first calculate probabilities of choosing each possible next city
+		for (Edge edge : edges) {
+			
+			city = getOtherCity(edge);
+			if (tour.cityAlreadyInTour(city)) continue;
+
+			if (edge.getLength() < minLength) {
+				chosenEdge = edge;
+				minLength = edge.getLength();
+			}
+		}
+
+		currCity = getOtherCity(chosenEdge);
+		tour.addCityToTour(currCity, chosenEdge.getLength());
+
+		return chosenEdge;
+	}
+
 	public Edge moveToNext(ArrayList<Edge> edges) {
 		ArrayList<Double> probabilities = new ArrayList<Double>();
+		ArrayList<Edge> availableEdges = new ArrayList<Edge>();
 		double sumPherLen = 0.;
 		double sumProbs = 0.;
 		City city;
@@ -41,6 +65,7 @@ public class Ant {
 			if (tour.cityAlreadyInTour(city)) continue;
 
 			probabilities.add(edge.getPheromoneLevel() * edge.getLength());
+			availableEdges.add(edge);
 			sumPherLen+=probabilities.get(probabilities.size()-1);
 		}
 
@@ -52,7 +77,8 @@ public class Ant {
 
 		// choose new path "randomly", weighted with probs just assigned
 		double value = rand.nextDouble() * sumProbs;
-		Edge chosenEdge = edges.get(chooseSpecified(value, probabilities));
+		int chosenIndex = chooseSpecified(value, probabilities);
+		Edge chosenEdge = availableEdges.get(chosenIndex);
 
 		currCity = getOtherCity(chosenEdge);
 		tour.addCityToTour(currCity, chosenEdge.getLength());
