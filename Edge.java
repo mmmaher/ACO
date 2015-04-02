@@ -31,13 +31,11 @@ public class Edge {
 	}
 
 	public City startCity() { return this.cities[0]; }
-
 	public City endCity() { return this.cities[1];}
 
 	public double getLength() { return this.length; }
 
 	public double getPheromoneLevel() { return this.pheromoneLevel; }
-
 	public void updatePheromoneLevel(double amount) { this.pheromoneLevel = amount; }
 
 	public void printEdge() {
