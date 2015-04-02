@@ -56,13 +56,11 @@ public class ACO {
 			eliteAnts = Integer.parseInt(args[7]);
 			elite = true;
 			epsilon = 0;
-			tau = 0;
 			qnot = 0;
 				
 		} else if (elitism.equals("ne")) {
 			epsilon = Double.parseDouble(args[7]);
-			tau = Double.parseDouble(args[8]);
-			qnot = Double.parseDouble(args[9]);
+			qnot = Double.parseDouble(args[8]);
 			eliteAnts = 0;
 
 		} else {

@@ -46,6 +46,21 @@ public class Graph {
 		return temp;
 	}
 
+	public double nearestNeighborTour() {
+
+		double length = 0;
+		for (Map.Entry<Integer, Map<Integer, Edge>> edgeMapPair : this.graph.entrySet()) {
+			double min = Double.MAX_VALUE;
+			
+			for (Map.Entry<Integer, Edge> edgePair : edgeMapPair.getValue().entrySet()) {
+				Edge edge = edgePair.getValue();
+				if (edge.getLength() < min) min = edge.getLength();	
+			}
+			length += min;
+		}
+		return length;
+	}
+
 
 	// Update pheromone level between two cities
 	public void updatePheromone(City c1, City c2, double value) {

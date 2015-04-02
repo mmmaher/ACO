@@ -75,8 +75,15 @@ public class ACORunner {
 		// move ant to a new city numCities - 1 times
 		for (int i = 1; i < numCities; i++) {
 
-			// tempEdge = edge the ant chooses to move on
-			Edge tempEdge = ant.moveToNext(problem.getCityEdges(currCity));
+			List<Edge> availableEdges = problem.getCityEdges(currCity);
+			Double randMove = rand.nextDouble();
+			Edge tempEdge; // edge the ant chooses to move on
+
+			if (randMove < qnot && !elitism) {
+				tempEdge = ant.trivialMove(availableEdges);
+			} else {
+				tempEdge = ant.moveToNext(availableEdges);
+			}
 			
 			if (!elitism) {
 				// wear away pheromone if ACS

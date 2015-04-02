@@ -21,12 +21,10 @@ public class Problem extends Graph{
 	}
 
 
-	public double caculateTau() {
-
-
-
-		
+	public double calculateTau() {
+		return  1.0 / (this.cities.numCities() * super.nearestNeighborTour());
 	}
+
 
 	// Read in a TSP file
 	public void readFile(File f) {
