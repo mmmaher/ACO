@@ -25,9 +25,7 @@ public class ACORunner {
 
 	// Algorithm specific data structures
 	private ArrayList<Ant> ants = new ArrayList<Ant>();
-	private ArrayList<City> bestTour = new ArrayList<City>(); 
-	private double bestTourLength;
-
+	private Tour bestTour = new Tour();
 
 // *********************** METHODS ************************** //
 	
@@ -38,7 +36,6 @@ public class ACORunner {
 						double beta_, 
 						double rho_,
 						double epsilon_, 
-						double tau_,
 						double qnot_,
 						int eliteAnts_,
 						boolean elite_) 
@@ -50,7 +47,6 @@ public class ACORunner {
 		beta = beta_;
 		rho = rho_;
 		epsilon = epsilon_;
-		tau = tau_;
 		qnot = qnot_;
 		eliteAnts = eliteAnts_;
 		elitism = elite_;
@@ -59,13 +55,7 @@ public class ACORunner {
 	}
 
 
-	public void printBestTour() {
-		for (int i = 0; i < bestTour.size(); i++) {
-			System.out.print(bestTour.get(i) + " ");
-		}
-		System.out.println("");
-		System.out.println("Length: " + bestTourLength);
-	}
+	public void printBestTour() { this.bestTour.printTour(); }
 
 
 	private void initializeAnts() {
@@ -84,11 +74,9 @@ public class ACORunner {
 
 		// move ant to a new city numCities - 1 times
 		for (int i = 1; i < numCities; i++) {
-			ArrayList<Edge> availableEdges = new ArrayList<Edge>();
-			availableEdges.addAll(problem.getCityEdges(currCity));
 
 			// tempEdge = edge the ant chooses to move on
-			Edge tempEdge = ant.moveToNext(availableEdges);
+			Edge tempEdge = ant.moveToNext(problem.getCityEdges(currCity));
 			
 			if (!elitism) {
 				// wear away pheromone if ACS
@@ -125,6 +113,7 @@ public class ACORunner {
 
 		problem = problem_;
 		numCities = problem.cities.numCities();
+		tau = problem.calculateTau();
 		int iterationCounter = 0;
 
 		// run as many times as we have iterations
@@ -137,7 +126,7 @@ public class ACORunner {
 
 				double currLength = createAntTour(ants.get(j));
 
-				if (currLength < bestTourLength) {
+				if (currLength < bestTour.getLength()) {
 					iterationBestLength = currLength;
 					iterationBest = j;
 				}
@@ -152,10 +141,9 @@ public class ACORunner {
 			// put pheromone down on best path
 			placePheromone(ants.get(iterationBest));
 
-			if (iterationBestLength < bestTourLength) {
-				bestTourLength = iterationBestLength;
-				bestTour.clear();
-				bestTour.addAll(ants.get(iterationBest).tour.getTour());
+			if (iterationBestLength < bestTour.getLength()) {
+				bestTour.resetTour();
+				bestTour = new Tour(ants.get(iterationBest).tour.getTour());
 			}
 
 			iterationCounter++;

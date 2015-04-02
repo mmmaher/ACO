@@ -20,6 +20,14 @@ public class Problem extends Graph{
 		super.initGraph(cities);
 	}
 
+
+	public double caculateTau() {
+
+
+
+		
+	}
+
 	// Read in a TSP file
 	public void readFile(File f) {
 		

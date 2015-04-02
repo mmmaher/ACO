@@ -36,7 +36,6 @@ public class ACO {
 	private static int eliteAnts;     // number of ants in elitims
 
 	// ACS exclusive variables
-	private static double tau;        // wearing away factor
 	private static double epsilon;    // wearing away factor  
 	private static double qnot;       // probability of choosing best edge
 
@@ -72,7 +71,7 @@ public class ACO {
 		}
 
 		prob = new Problem(file);
-		runner = new ACORunner(numAnts, numTours, alpha, beta, rho, epsilon, tau, qnot, eliteAnts, elite);
+		runner = new ACORunner(numAnts, numTours, alpha, beta, rho, epsilon, qnot, eliteAnts, elite);
 		runner.run(prob);
 	}
 }

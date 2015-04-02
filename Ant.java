@@ -28,8 +28,8 @@ public class Ant {
 		else { return edge.startCity(); }
 	}
 
-	public Edge moveToNext(ArrayList<Edge> edges) {
-		ArrayList<Double> probabilities = new ArrayList<Double>();
+	public Edge moveToNext(List<Edge> edges) {
+		List<Double> probabilities = new ArrayList<Double>();
 		double sumPherLen = 0.;
 		double sumProbs = 0.;
 		City city;
@@ -60,7 +60,7 @@ public class Ant {
 		return (chosenEdge);
 	}
 
-	private int chooseSpecified(double num, ArrayList<Double> a) {
+	private int chooseSpecified(double num, List<Double> a) {
 		// sees where specified num falls in the array
 		for (int i = 0; i < a.size(); i++) {
 			if (num < a.get(i)) {
