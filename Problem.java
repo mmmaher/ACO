@@ -16,7 +16,6 @@ public class Problem extends Graph{
 		super(cities);
 		this.cities = new Cities();
 		this.readFile(f);
-		this.cities.printCities();
 		super.initGraph(cities);
 	}
 

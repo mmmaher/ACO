@@ -14,11 +14,11 @@ public class Graph {
 	// Creates a graph with City ID as key and list of edges 
 	// from that Cityas value
 	public void initGraph(Cities cities) {
-		for (int i = 1; i < cities.numCities(); i++) {
+		for (int i = 0; i < cities.numCities(); i++) {
 			City c1 = cities.getCity(i);
 			Map<Integer, Edge> edges = new HashMap<Integer, Edge>();
 
-			for (int j = 1; j < cities.numCities(); j++) {
+			for (int j = 0; j < cities.numCities(); j++) {
 				City c2 = cities.getCity(j);
 
 				if (i != j) {

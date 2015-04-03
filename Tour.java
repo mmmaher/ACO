@@ -7,11 +7,13 @@ public class Tour {
 
 	public Tour() {
 		this.tour = new ArrayList<City>();
+		this.length = Double.MAX_VALUE;
 	}
 
-	public Tour(ArrayList<City> tour) {
+	public Tour(ArrayList<City> tour, double length) {
 		resetTour();
-		if (!tour.isEmpty()) this.tour = tour;
+		this.tour = tour;
+		this.length = length;
 	}
 
 	public void addCityToTour(City city, double len) {
@@ -20,8 +22,10 @@ public class Tour {
 	}
 
 	public void resetTour() {
-		this.tour.clear();
-		this.length = 0.0;
+		if (this.tour != null) {
+			this.tour.clear();
+			this.length = 0.0;
+		}
 	}
 
 	public double getLength() { return this.length; }

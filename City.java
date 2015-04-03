@@ -15,4 +15,6 @@ public class City {
 	public int getID() { return this.id; }
 	public double getX() { return this.x; }
 	public double getY() { return this.y; }
+
+	public void printCity() { System.out.println("ID: " + this.id + " At: " + this.x + ", " + this.y); }
 }

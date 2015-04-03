@@ -74,17 +74,20 @@ public class ACORunner {
 
 		// move ant to a new city numCities - 1 times
 		for (int i = 1; i < numCities; i++) {
-
 			List<Edge> availableEdges = problem.getCityEdges(currCity);
 			Double randMove = rand.nextDouble();
 			Edge tempEdge; // edge the ant chooses to move on
+
+			if (availableEdges.isEmpty()) break;
 
 			if (randMove < qnot && !elitism) {
 				tempEdge = ant.trivialMove(availableEdges);
 			} else {
 				tempEdge = ant.moveToNext(availableEdges);
 			}
-			
+
+			if (tempEdge == null) break;
+
 			if (!elitism) {
 				// wear away pheromone if ACS
 				double amount = (1 - epsilon) * tempEdge.getPheromoneLevel() + epsilon * tau;
@@ -116,7 +119,7 @@ public class ACORunner {
 
 
 	// Implementation of ACS and Elitist ACO
-	public void run(Problem problem_) {
+	public String run(Problem problem_) {
 
 		problem = problem_;
 		numCities = problem.cities.numCities();
@@ -146,14 +149,23 @@ public class ACORunner {
 			if (elitism) { retraceAntTour(); }
 
 			// put pheromone down on best path
-			placePheromone(ants.get(iterationBest));
+			if (iterationBest > 0) placePheromone(ants.get(iterationBest));
 
 			if (iterationBestLength < bestTour.getLength()) {
 				bestTour.resetTour();
-				bestTour = new Tour(ants.get(iterationBest).tour.getTour());
+				bestTour = new Tour(ants.get(iterationBest).tour.getTour(), iterationBestLength);
 			}
 
 			iterationCounter++;
+			if (iterationCounter%10 == 0) System.out.println(iterationCounter);
 		} while (iterationCounter < numTours);
+		return formatResults();
+	}
+
+	private String formatResults() {
+
+		String ret = String.format("DONE\nBest Tour Length:\n   %f\n", bestTour.getLength());
+		return ret;
+
 	}
 }

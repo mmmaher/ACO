@@ -16,6 +16,7 @@ public class Edge {
 			this.length = computeLength();
 		} else {
 			System.out.println("ERROR: tried to create edge with NULL city");
+			System.exit(0);
 			this.length = 0;
 		}
 

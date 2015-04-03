@@ -12,14 +12,12 @@ public class Cities {
 	public City getCity(int id) { return this.cities.get(id); }
 	public int numCities() { return this.cities.size(); }
 	
-	public void printCities() {
-		for (int i = 0; i < this.cities.size(); i++) {
-			printCity(i);
-		}
-	}
 
-	private void printCity(int id) {
-		City temp = this.cities.get(id);
-		System.out.println(temp.getX() + ", " + temp.getY());
+	public void printACity(int id) { this.cities.get(id).printCity(); }
+
+	public void printCities() {
+		for (Map.Entry<Integer, City> cityPair : this.cities.entrySet()) {
+			cityPair.getValue().printCity();
+		}
 	}
 }

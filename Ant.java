@@ -44,6 +44,8 @@ public class Ant {
 			}
 		}
 
+		if (chosenEdge == null) return null;
+
 		currCity = getOtherCity(chosenEdge);
 		tour.addCityToTour(currCity, chosenEdge.getLength());
 
@@ -54,8 +56,8 @@ public class Ant {
 	public Edge moveToNext(List<Edge> edges) {
 		List<Double> probabilities = new ArrayList<Double>();
 		List<Edge> availableEdges = new ArrayList<Edge>();
-		double sumPherLen = 0.;
-		double sumProbs = 0.;
+		double sumPherLen = 0;
+		double sumProbs = 0;
 		City city;
 
 		// first calculate probabilities of choosing each possible next city
@@ -68,6 +70,8 @@ public class Ant {
 			availableEdges.add(edge);
 			sumPherLen+=probabilities.get(probabilities.size()-1);
 		}
+
+		if (availableEdges.isEmpty()) return null;
 
 		// then update probabilities to divide by sumPherLen
 		for (int i = 0; i < probabilities.size(); i++) {
