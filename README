@@ -1,1 +1,10 @@
 NIC Lab 3: ACO
+
+
+java ACO [filename] [numAnts] [alpha] [beta] [phi] [rho] [elitism]
+
+	alpha = pheromone trail importance
+	beta = distance between city importance
+	phi = local pheromone update
+	rho = global pheromone update
+	elitism = "el" or "ne"
