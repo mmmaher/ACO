@@ -116,7 +116,7 @@ public class ACORunner {
 	}
 
 
-	private void retraceAntTour(int iterationBest) {
+	private void retraceAntTour() {
 		for (int i = 0; i < numAnts; i++) {
 			placePheromone(ants.get(i), false);
 		}
@@ -151,7 +151,7 @@ public class ACORunner {
 			problem.evaporatePheromone(rho); // rho HERE***
 
 			// if elitist, put down pheromone for each ant
-			if (elitism) { retraceAntTour(iterationBest); }
+			if (elitism) { retraceAntTour(); }
 
 			// put pheromone down on best path
 			if (iterationBest > 0) placePheromone(ants.get(iterationBest), true);
