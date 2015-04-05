@@ -66,10 +66,12 @@ public class Ant {
 
 			if (tour.cityAlreadyInTour(city)) continue;
 
-			double value = Math.pow(edge.getPheromoneLevel(), alpha) * Math.pow(1 / edge.getLength(), beta);
-			probabilities.add(value);
-			availableEdges.add(edge);
-			sumPherLen+=value;
+			if (edge.getLength() > 0) {
+				double value = Math.pow(edge.getPheromoneLevel(), alpha) * Math.pow(1 / edge.getLength(), beta);
+				probabilities.add(value);
+				availableEdges.add(edge);
+				sumPherLen+=value;
+			}
 		}
 
 		if (availableEdges.isEmpty()) return null;
