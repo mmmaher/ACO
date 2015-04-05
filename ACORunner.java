@@ -100,20 +100,27 @@ public class ACORunner {
 	}
 
 
-	private void placePheromone(Ant ant) {
+	private void placePheromone(Ant ant, boolean bestSoFar) {
 		ArrayList<City> path = new ArrayList<City>();
 		path.addAll(ant.tour.getTour());
-		double value = beta / ant.tour.getLength(); // BETA HERE***
+		double value = 1 / ant.tour.getLength(); // BETA HERE*** -- I think this should be rho, and only if not elitist
 		
+		if (bestSoFar) {
+			if (!elitism) { value = value * rho; }
+			else { value = value * eliteAnts; }
+		}
+
 		for (int j = 1; j < path.size(); j++) { //assumes >1 city
 			problem.updatePheromone(path.get(j-1), path.get(j), value);
 		}
 	}
 
 
-	private void retraceAntTour() {
+	private void retraceAntTour(int iterationBest) {
 		for (int i = 0; i < numAnts; i++) {
-			placePheromone(ants.get(i));
+			if (i != iterationBest) { 
+				placePheromone(ants.get(i), false);
+			}
 		}
 	}
 
@@ -146,10 +153,10 @@ public class ACORunner {
 			problem.evaporatePheromone(rho); // rho HERE***
 
 			// if elitist, put down pheromone for each ant
-			if (elitism) { retraceAntTour(); }
+			if (elitism) { retraceAntTour(iterationBest); }
 
 			// put pheromone down on best path
-			if (iterationBest > 0) placePheromone(ants.get(iterationBest));
+			if (iterationBest > 0) placePheromone(ants.get(iterationBest), true);
 
 			if (iterationBestLength < bestTour.getLength()) {
 				bestTour.resetTour();
