@@ -118,9 +118,7 @@ public class ACORunner {
 
 	private void retraceAntTour(int iterationBest) {
 		for (int i = 0; i < numAnts; i++) {
-			if (i != iterationBest) { 
-				placePheromone(ants.get(i), false);
-			}
+			placePheromone(ants.get(i), false);
 		}
 	}
 
