@@ -70,6 +70,8 @@ public class ACO {
 
 		prob = new Problem(file);
 		runner = new ACORunner(numAnts, numTours, alpha, beta, rho, epsilon, qnot, eliteAnts, elite);
-		System.out.print("File: "+file.getName()+"\n"+runner.run(prob));
+		Tour bestTour = runner.run(prob);
+		System.out.print("File: "+file.getName()+"\nDONE\nBest Tour:\n");
+		bestTour.printTour();
 	}
 }

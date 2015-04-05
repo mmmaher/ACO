@@ -53,7 +53,7 @@ public class Ant {
 	}
 
 
-	public Edge moveToNext(List<Edge> edges) {
+	public Edge moveToNext(List<Edge> edges, double alpha, double beta) {
 		List<Double> probabilities = new ArrayList<Double>();
 		List<Edge> availableEdges = new ArrayList<Edge>();
 		double sumPherLen = 0;
@@ -66,9 +66,10 @@ public class Ant {
 
 			if (tour.cityAlreadyInTour(city)) continue;
 
-			probabilities.add(edge.getPheromoneLevel() * edge.getLength());
+			double value = Math.pow(edge.getPheromoneLevel(), alpha) * Math.pow(edge.getLength(), beta);
+			probabilities.add(value);
 			availableEdges.add(edge);
-			sumPherLen+=probabilities.get(probabilities.size()-1);
+			sumPherLen+=value;
 		}
 
 		if (availableEdges.isEmpty()) return null;

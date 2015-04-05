@@ -35,10 +35,16 @@ public class Tour {
 	public ArrayList<City> getTour() { return this.tour; }
 
 	public void printTour() {
+		City lastCity = null;
 		for (City c : this.tour) {
-			System.out.print(c.getX() + ", " + c.getY());
+			if (lastCity != null) {
+				Edge temp = new Edge(lastCity, c);
+				//temp.printEdge();
+			}
+			c.printCity();
+			lastCity = c;
 		}
 		System.out.println();
-		System.out.println("Length: " + this.length);
+		System.out.format("Length: %.2f\n", this.length);
 	}
 }

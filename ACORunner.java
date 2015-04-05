@@ -83,7 +83,7 @@ public class ACORunner {
 			if (randMove < qnot && !elitism) {
 				tempEdge = ant.trivialMove(availableEdges);
 			} else {
-				tempEdge = ant.moveToNext(availableEdges);
+				tempEdge = ant.moveToNext(availableEdges, alpha, beta);
 			}
 
 			if (tempEdge == null) break;
@@ -119,7 +119,7 @@ public class ACORunner {
 
 
 	// Implementation of ACS and Elitist ACO
-	public String run(Problem problem_) {
+	public Tour run(Problem problem_) {
 
 		problem = problem_;
 		numCities = problem.cities.numCities();
@@ -159,13 +159,6 @@ public class ACORunner {
 			iterationCounter++;
 			if (iterationCounter%10 == 0) System.out.println(iterationCounter);
 		} while (iterationCounter < numTours);
-		return formatResults();
-	}
-
-	private String formatResults() {
-
-		String ret = String.format("DONE\nBest Tour Length:\n   %f\n", bestTour.getLength());
-		return ret;
-
+		return bestTour;
 	}
 }

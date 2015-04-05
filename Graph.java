@@ -65,6 +65,7 @@ public class Graph {
 	// Update pheromone level between two cities
 	public void updatePheromone(City c1, City c2, double value) {
 		this.graph.get(c1.getID()).get(c2.getID()).updatePheromoneLevel(value);
+		this.graph.get(c2.getID()).get(c1.getID()).updatePheromoneLevel(value);
 	}
 
 
@@ -84,12 +85,12 @@ public class Graph {
 				Edge edge = edgePair.getValue();
 				
 				// Only evaporate on edges to a city with a higher ID
-				if (id < edge.endCity().getID()) {
+				//if (id < edge.endCity().getID()) {
 					//Pheromone evaporates the same in ACS and Elitist 
 					double newAmount = (1 - evapFactor) * edge.getPheromoneLevel();
 					edge.updatePheromoneLevel(newAmount);
 					//System.out.println(entry.getKey() + "/" + entry.getValue());
-				}
+				//}
 			}	
 		}
 	}

@@ -40,6 +40,7 @@ public class Edge {
 	public void updatePheromoneLevel(double amount) { this.pheromoneLevel = amount; }
 
 	public void printEdge() {
-		System.out.println("Edge between city " + cities[0].getID() + " and city " + cities[1].getID());
+		System.out.print("City " + this.cities[0].getID() + " to City " + this.cities[1].getID() + " ");
+		System.out.println(String.format("Length: %.2f", this.length));
 	}
 }
