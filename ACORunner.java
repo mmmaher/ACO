@@ -4,6 +4,8 @@ import java.lang.Math;
 
 public class ACORunner {
 
+	private static final int PRINT_INTERVAL = 5;
+
 	private static int numAnts;
 	private static int numTours;
 	private static int numCities;
@@ -67,16 +69,14 @@ public class ACORunner {
 
 	private void runTours() {
 
-		for (int i = 0; i < numCities; i++) {
+		for (int i = 0; i < numCities -1; i++) {
 
 			for (Ant ant : ants) {
 				City currCity;
 				if (i == 0) {
 					currCity = problem.cities.getCity(rand.nextInt(numCities));
 					ant.startCity(currCity);
-				} else {
-					currCity = ant.getCurrentCity();
-				}
+				} else { currCity = ant.getCurrentCity(); }
 
 				List<Edge> availableEdges = problem.getCityEdges(currCity);
 				Double randMove = rand.nextDouble();
@@ -86,9 +86,8 @@ public class ACORunner {
 
 				if (randMove < qnot && !elitism) {
 					tempEdge = ant.trivialMove(availableEdges);
-				} else {
-					tempEdge = ant.moveToNext(availableEdges, alpha, beta);
-				}
+
+				} else { tempEdge = ant.moveToNext(availableEdges, alpha, beta); }
 
 				if (tempEdge == null) break;
 
@@ -156,7 +155,7 @@ public class ACORunner {
 			if (elitism) { retraceAntTour(); }
 
 			// put pheromone down on best path
-			if (iterationBest > 0) placePheromone(ants.get(iterationBest), true);
+			placePheromone(ants.get(iterationBest), true);
 
 			// if this iteration's best tour is better than current best tour, update var
 			if (iterationBestLength < bestTour.getLength()) {
@@ -165,7 +164,7 @@ public class ACORunner {
 			}
 
 			iterationCounter++;
-			if (iterationCounter%10 == 0) System.out.println(iterationCounter);
+			if (iterationCounter%PRINT_INTERVAL == 0) System.out.println(iterationCounter);
 		} while (iterationCounter < numTours);
 		return bestTour;
 	}

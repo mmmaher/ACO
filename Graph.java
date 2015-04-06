@@ -76,21 +76,15 @@ public class Graph {
 
 
 	// Evaporate pheromone on all edges, edges are unidirectional (23,1) is the same as (1,23)
-	// so makes sure to only evaporate an edge once.
+	// so makes sure to evaporate both.
 	public void evaporatePheromone(double evapFactor) {
 		for (Map.Entry<Integer, Map<Integer, Edge>> edgeMapPair : this.graph.entrySet()) {
-			
-			int id = edgeMapPair.getKey();
 			for (Map.Entry<Integer, Edge> edgePair : edgeMapPair.getValue().entrySet()) {
 				Edge edge = edgePair.getValue();
-				
-				// Only evaporate on edges to a city with a higher ID
-				//if (id < edge.endCity().getID()) {
-					//Pheromone evaporates the same in ACS and Elitist 
-					double newAmount = (1 - evapFactor) * edge.getPheromoneLevel();
-					edge.updatePheromoneLevel(newAmount);
-					//System.out.println(entry.getKey() + "/" + entry.getValue());
-				//}
+
+				//Pheromone evaporates the same in ACS and Elitist 
+				double newAmount = (1 - evapFactor) * edge.getPheromoneLevel();
+				edge.updatePheromoneLevel(newAmount);
 			}	
 		}
 	}

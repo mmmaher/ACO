@@ -76,10 +76,11 @@ public class Ant {
 
 		if (availableEdges.isEmpty()) return null;
 
-		// then update probabilities to divide by sumPherLen
-		for (int i = 0; i < probabilities.size(); i++) {
-			sumProbs += probabilities.get(i) / sumPherLen;
-			probabilities.set(i, sumProbs);
+		int counter = 0;
+		for (Double value : probabilities) {
+			sumProbs += value / sumPherLen;
+			probabilities.set(counter, sumProbs);
+			counter++;
 		}
 
 		// choose new path "randomly", weighted with probs just assigned
