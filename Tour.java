@@ -41,7 +41,7 @@ public class Tour {
 				Edge temp = new Edge(lastCity, c);
 				//temp.printEdge();
 			}
-			c.printCity();
+			//c.printCity();
 			lastCity = c;
 		}
 		System.out.println();

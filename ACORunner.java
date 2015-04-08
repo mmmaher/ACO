@@ -4,7 +4,7 @@ import java.lang.Math;
 
 public class ACORunner {
 
-	private static final int PRINT_INTERVAL = 5;
+	private static final int PRINT_INTERVAL = 1;
 
 	private static int numAnts;
 	private static int numTours;
@@ -164,7 +164,7 @@ public class ACORunner {
 			}
 
 			iterationCounter++;
-			if (iterationCounter%PRINT_INTERVAL == 0) System.out.println(iterationCounter);
+			if (iterationCounter%PRINT_INTERVAL == 0) System.out.println("Iteration: "+iterationCounter);
 		} while (iterationCounter < numTours);
 		return bestTour;
 	}
