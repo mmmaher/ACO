@@ -4,7 +4,7 @@ import java.lang.Math;
 
 public class ACORunner {
 
-	private static final int PRINT_INTERVAL = 1;
+	private static final int PRINT_INTERVAL = 10;
 
 	private static int numAnts;
 	private static int numTours;
@@ -106,14 +106,13 @@ public class ACORunner {
 		double value = 1 / ant.tour.getLength(); 
 		
 		if (bestSoFar) {
-			if (!elitism) { value = value * rho; }
-			else { value = value * eliteAnts; }
+			if (elitism) value = value * eliteAnts;
 		}
 
 		for (int j = 1; j < path.size(); j++) { //assumes >1 city
 			// adds the calculated value to exisintg pheromomone leve
-			value += problem.getPheromone(path.get(j-1), path.get(j)); 
-			problem.updatePheromone(path.get(j-1), path.get(j), value);
+			double pheromone = problem.getPheromone(path.get(j-1), path.get(j)); 
+			problem.updatePheromone(path.get(j-1), path.get(j), value + pheromone);
 		}
 	}
 
@@ -154,7 +153,7 @@ public class ACORunner {
 			problem.evaporatePheromone(rho); // rho HERE***
 
 			// if elitist, put down pheromone for each ant
-			if (elitism) { retraceAntTour(); }
+			retraceAntTour();
 
 			// put pheromone down on best path
 			placePheromone(ants.get(iterationBest), true);

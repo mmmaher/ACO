@@ -84,7 +84,7 @@ public class Graph {
 
 				//Pheromone evaporates the same in ACS and Elitist 
 				double newAmount = (1 - evapFactor) * edge.getPheromoneLevel();
-				edge.updatePheromoneLevel(newAmount);
+				this.updatePheromone(edge.startCity(), edge.endCity(), newAmount);
 			}	
 		}
 	}
