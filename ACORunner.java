@@ -103,7 +103,7 @@ public class ACORunner {
 	private void placePheromone(Ant ant, boolean bestSoFar) {
 		ArrayList<City> path = new ArrayList<City>();
 		path.addAll(ant.tour.getTour());
-		double value = 1 / ant.tour.getLength(); // BETA HERE*** -- I think this should be rho, and only if not elitist
+		double value = 1 / ant.tour.getLength(); 
 		
 		if (bestSoFar) {
 			if (!elitism) { value = value * rho; }
@@ -111,6 +111,8 @@ public class ACORunner {
 		}
 
 		for (int j = 1; j < path.size(); j++) { //assumes >1 city
+			// adds the calculated value to exisintg pheromomone leve
+			value += problem.getPheromone(path.get(j-1), path.get(j)); 
 			problem.updatePheromone(path.get(j-1), path.get(j), value);
 		}
 	}
