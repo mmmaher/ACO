@@ -1,10 +1,20 @@
 NIC Lab 3: ACO
+Max Bucci, Megan Maher, Nikki Morin
+
+Implements Ant Colony System and Elitist Ant System algorithms with adjustable parameters
 
 
-java ACO [filename] [numAnts] [alpha] [beta] [phi] [rho] [elitism]
+Input:
+
+	Basic input:
+
+	java ACO [filename] [elitism] [numAnts] [numTours] [alpha] [beta] [phi] [rho] [elitism]
 
 	alpha = pheromone trail importance
 	beta = distance between city importance
 	phi = local pheromone update
 	rho = global pheromone update
 	elitism = "el" or "ne"
+
+	"rule of thumb" command:
+	java ACO [filename] [elitism] 10 25 1 5 0.1 5
