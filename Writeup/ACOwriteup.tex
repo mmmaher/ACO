@@ -116,9 +116,16 @@ Ant Colony System and Elitism were each tested with the same five parameter conf
 \section{Results} 
 As the figures below show, increasing the number of ants improved performance (decreased tour length) across the board. But, had the largest impact in the Elitism System. The explanation for this should be trivial, more ants gives more possibilities of finding a shorter tour. In general though, the number of ants didn’t have a large impact on performance making, at most, a 0.5\% difference in ACS and 4.2\% in Elitism. These results both result from the pr3292 problem between 10 and 30 ants. 
 
+a\\a\\a\\a\\a\\a\\a\\a\\a\\a\\a\\a\\a\\a\\a\\a\\a\\a\\a\\a\\a\\a\\a\\a\\a\\
+
+
 Additionally, a rho value of 0.5 was the best performing configuration in all tests. This result is surprising as it goes against the rule-of-thumb configuration, which has a rho value of 0.1. As rho is the evaporation factor, a possible explanation for this difference is diversity. Since we are running on relatively few iterations and not finding the optimal length, a higher value of rho allows for more diversity across iterations, taking ''bigger steps'' between iterations as opposed to creeping towards an optimum. 
 
+a\\a\\a\\a\\a\\a\\a\\a\\a\\a\\a\\a\\a\\a\\a\\a\\a\\a\\a\\a\\a\\a\\a\\a\\a\\
+
 The most significant result though is the performance of ACS versus Elitism. As the figure below shows, ACS seriously out performed Elitism in all tests. ACS achieved an average best of 90.8% of optimal for the d2103 problem, while Elitism achieved an overall best of only 77.5\%, on the same problem. In general, ACS out performed Elitism by an average of 12.2 percentage points across all problems. Without more testing on more problems it’s hard associate this difference in performance to any one factor. A few possibilities though are that Elitism favors the overall best with too great a weight which could lead to it finding local minimums. Elitism might also require more iterations to complete than ACS, it’s performance curve may resemble the inverse log, while ACS is more linear. Initial tests of ACS and Elitism on much smaller problems (~50 cities) with higher iterations found the two to perform roughly equally. But, due to time and processing constraints we could not test the larger problems with the same number of iterations.
+
+\hspace{100cm}
 
 Finally, our tests showed Elitism to be more sensitive to parameter changes than ACS. As can be seen in the tables below, ACS is more or less constant across it’s five tests. Elitism, however, has much greater variation in its performance. For a given problem, ACS’s best and worst tour length varied at most ~18000 or 3.8\% for pr3292. Similarly, Elitism’s best and worst varied ~85000 or 15\%, also for the pr3292. This contrast between best and worst could again be due to Elitism’s best-tour update rules. As the worst had a low rho and best a high rho, the increased evaporation may have countered the reliance on best-tour. But, as mentioned earlier it is hard to make hard conclusions without further testing, something we would have done with more time and/or more powerful computers.
 
